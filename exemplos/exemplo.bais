@@ -1,0 +1,107 @@
+// Este é um arquivo de exemplo para testar o analisador léxico da linguagem "Baianês"
+
+// 1. Definição e inicialização de variáveis numéricas e de caractere
+var longo numeroGrande = 1234567890;
+const flutuante taxaJuros = 0.0575;
+const oxe inicialNome = 'J';
+const oxente mensagem = "Qualé de merma?";
+
+// 2. Definição de arrays
+const flutuante notasAlunos[5];
+const inteiro idades[] = {25, 30, 22, 45, 19};
+
+// Acessos e atribuições a variáveis e elementos de array
+var inteiro primeiroElemento = idades[0];
+notasAlunos[0] = 8.5 + 1.0;
+notasAlunos[1] = (taxaJuros * 100) / 2; // Expressão aritmética
+notasAlunos[2] = numeroGrande % 100; // Operador de módulo
+
+// 3. Definição de strings
+firme oxente saudacao = "Olá, mundo da Bahia!";
+var oxente mensagem = "Bora pra cima!";
+
+// 4. Desvios condicionais simples e compostos
+var inteiro idade = 18;
+se plante (idade >= 18) {
+    pegaVisao("Você é maior de idade.");
+} va nessa {
+    pegaVisao("Você é menor de idade.");
+}
+
+var flutuante saldo = 150.75;
+sePlante (saldo == 0.0) {
+    pegaVisao("Sua conta está zerada.");
+} sePlante (saldo < 100.0) { // Condicional composto
+    pegaVisao("Seu saldo está baixo.");
+} vaNessa {
+    pegaVisao("Seu saldo é bom!");
+}
+
+// 5. Comandos de repetição (laços)
+
+// Laço 'paletada' (equivalente ao for)
+paletada (var inteiro i = 0; i < 3; i++) {
+    pegaVisao("Contando com paletada: " + i);
+    notasAlunos[3] += i**2; // Testando o operador de potência
+}
+
+// Laço 'fudee' (equivalente ao while)
+var inteiro contador = 0;
+enquanto (contador < 5) {
+    pegaVisao("Contando com laço enquanto: " + contador);
+    contador++; // Operador de incremento
+}
+
+// Laço 'di...fudee' (equivalente ao do-while)
+vareia inteiro j = 0;
+faz {
+    pegaVisao("Contando com laço faz...enquanto: " + j);
+    j += 1; // Operador de atribuição composta
+} enquanto (j < 2);
+
+// 6. Funções
+
+// Função que retorna um inteiro
+barril calculaDobro(valor: inteiro): inteiro {
+    sePique valor * 2;
+}
+
+// Função que retorna um flutuante
+barril calculaMedia(a: flutuante, b: flutuante): flutuante {
+    sePique (a + b) / 2.0;
+}
+
+// Função que não retorna nada
+barril imprimeMensagem(): nada {
+    pegaVisao("Esta é uma mensagem de uma função sem retorno.");
+}
+
+// Chamadas de função
+vareia inteiro dobroDeDez = calculaDobro(10);
+pegaVisao("O dobro de 10 é: " + dobroDeDez);
+
+vareia flutuante media = calculaMedia(10.5, 20.5);
+pegaVisao("A média é: " + media);
+
+
+// Função principal
+barril brocou(): nada {
+    // Ponto de entrada do código
+    pegaVisao("Iniciando o programa principal!");
+
+    // Testando mais operadores bitwise
+    var inteiro bitA = 5; // 0101
+    var inteiro bitB = 3; // 0011
+    var inteiro resultadoAND = bitA & bitB; // 0001 (1)
+    var inteiro resultadoOR = bitA | bitB;  // 0111 (7)
+    var inteiro resultadoXOR = bitA ^ bitB; // 0110 (6)
+    var inteiro resultadoNOT = ~bitA;      // Depende do tamanho do int
+
+    pegaVisao("Bitwise AND: " + resultadoAND);
+    pegaVisao("Bitwise OR: " + resultadoOR);
+    pegaVisao("Bitwise XOR: " + resultadoXOR);
+    pegaVisao("Bitwise NOT de 5: " + resultadoNOT); // Será um número negativo em C (complemento de 2)
+
+    pegaVisao("Programa principal finalizado.");
+}
+
