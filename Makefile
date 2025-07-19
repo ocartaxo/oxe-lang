@@ -12,7 +12,9 @@ LEX = flex
 LDLIBS = -ll
 
 # Nome do seu arquivo fonte .l
-LEX_SRC = src/oxelang_lexer.l 
+LEX_SRC = lexer/oxelang_lexer.l 
+# Nome do arquivo fonte .y
+SIN_SRC = parser/parser.y
 
 # Nome do arquivo C gerado pelo Flex (padrão é lex.yy.c)
 C_SRC = lex.yy.c
