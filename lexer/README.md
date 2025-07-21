@@ -264,3 +264,4 @@ A saída será uma lista dos **tokens reconhecidos**, com sua **categoria** e va
 
 1. Adidiona uma regra para ignorar comentários em multiplas linhas.
 2. Abrevia os tokens para deixar a saida mais enxuta.
+3. Linka o Flex com o Bison
