@@ -52,7 +52,7 @@ Arquivos `.bais` contêm código-fonte em Oxe Lang. O analisador identifica:
 | `barril`         | Definição de função           |
 | `se plante`      | Início de condição (if)       |
 | `sePlante`       | Condição intermediária (elif) |
-| `va nessa`       | Condição final (else)         |
+| `vaNessa`       | Condição final (else)         |
 | `paletada`       | Laço de repetição (for)       |
 | `enquanto`       | Laço de repetição (while)     |
 | `faz...enquanto` | Laço do-while                 |
@@ -259,3 +259,8 @@ A saída será uma lista dos **tokens reconhecidos**, com sua **categoria** e va
 ## Diagrama de Transições
 
 <img src="diagrama_de_transicoes.drawio.png" alt="Diagrama de Transições" />
+
+# Changelist
+
+1. Adidiona uma regra para ignorar comentários em multiplas linhas.
+2. Abrevia os tokens para deixar a saida mais enxuta.
