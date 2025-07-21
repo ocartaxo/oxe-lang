@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "y.tab.h" // Header gerado pelo Bison
+
+extern YYSTYPE yylval; // Variavel para comunicar valores ao Bison
 
 // Definições de tokens (podem ser usadas por um parser como Yacc/Bison)
 typedef enum {
@@ -199,23 +202,23 @@ WHITESPACE  [ \t\n]+
 
 %%
 
-"inteiro"   { print_token(T_INTEIRO, yytext); return T_INTEIRO; }
-"flutuante" { print_token(T_FLUTUANTE, yytext); return T_FLUTUANTE; }
-"longo"     { print_token(T_LONGO, yytext); return T_LONGO; }
-"var"    { print_token(T_VAR, yytext); return T_VAR; }
-"const"     { print_token(T_CONST, yytext); return T_CONST; }
-"oxe"       { print_token(T_OXE, yytext); return T_OXE; }
-"oxente"    { print_token(T_OXENTE, yytext); return T_OXENTE; }
-"brocou"    { print_token(T_BROCOU, yytext); return T_BROCOU; }
+"inteiro"        { print_token(T_INTEIRO, yytext); return T_INTEIRO; }
+"flutuante"      { print_token(T_FLUTUANTE, yytext); return T_FLUTUANTE; }
+"longo"          { print_token(T_LONGO, yytext); return T_LONGO; }
+"var"            { print_token(T_VAR, yytext); return T_VAR; }
+"const"          { print_token(T_CONST, yytext); return T_CONST; }
+"oxe"            { print_token(T_OXE, yytext); return T_OXE; }
+"oxente"         { print_token(T_OXENTE, yytext); return T_OXENTE; }
+"brocou"         { print_token(T_BROCOU, yytext); return T_BROCOU; }
 "pegaVisao"      { print_token(T_PEGAVISAO, yytext); return T_PEGAVISAO; }
-"paletada"  { print_token(T_PALETADA, yytext); return T_PALETADA; }
-"barril"    { print_token(T_BARRIL, yytext); return T_BARRIL; }
-"sePique"  { print_token(T_SEPIQUE, yytext); return T_SEPIQUE; }
-"sePlante" { print_token(T_SEPLANTE, yytext); return T_SEPLANTE; }
-"vaNessa"  { print_token(T_VANESSA, yytext); return T_VANESSA; }
-"nada"      { print_token(T_NADA, yytext); return T_NADA; }
-"faz"        { print_token(T_FAZ, yytext); return T_FAZ; }
-"enquanto"     { print_token(T_ENQUANTO, yytext); return T_ENQUANTO; }
+"paletada"       { print_token(T_PALETADA, yytext); return T_PALETADA; }
+"barril"         { print_token(T_BARRIL, yytext); return T_BARRIL; }
+"sePique"        { print_token(T_SEPIQUE, yytext); return T_SEPIQUE; }
+"sePlante"       { print_token(T_SEPLANTE, yytext); return T_SEPLANTE; }
+"vaNessa"        { print_token(T_VANESSA, yytext); return T_VANESSA; }
+"nada"           { print_token(T_NADA, yytext); return T_NADA; }
+"faz"            { print_token(T_FAZ, yytext); return T_FAZ; }
+"enquanto"       { print_token(T_ENQUANTO, yytext); return T_ENQUANTO; }
 
 "+"         { print_token(T_PLUS, yytext); return T_PLUS; }
 "-"         { print_token(T_MINUS, yytext); return T_MINUS; }
@@ -259,8 +262,8 @@ WHITESPACE  [ \t\n]+
 
 {ID}        { print_token(T_ID, yytext); return T_ID; }
 
-{COMMENT}   { /* Ignora comentários de linha única */ }
-{ML_COMMENT} { /* Ignora comentários de multiplas linhas */ }
+{COMMENT}     { /* Ignora comentários de linha única */ }
+{ML_COMMENT}  { /* Ignora comentários de multiplas linhas */ }
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
 .           { print_token(T_ERROR, yytext); return T_ERROR; }
