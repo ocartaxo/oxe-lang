@@ -2,6 +2,11 @@
 
 Linguagem de programacao imperativa inspirada nas girias baianas.
 
+**Autores**
+- Isaac Araujo  
+- Otávio Cartaxo  
+- Rísia Cerqueira
+
 # Construção da Linguagem
 - [Analisador Léxico (scanner)](lexer/README.md)
 - [Analisador Sintático (parser)](parser/README.md)
