@@ -233,6 +233,22 @@ for_increment:
     | /* Vazio */ { $$ = createNode("empty_for_inc", NULL, NULL, NULL); }
     ;
 
+/* --- Funcoes --- */
+function_definition:
+    T_BARRIL T_ID T_LPAREN param_list T_RPAREN T_COLON return_type block { $$ = createNode("function_definition", $2, $4, createNode("return_type", NULL, $7, $8)); }
+    | T_BARRIL T_BROCOU T_LPAREN T_RPAREN T_COLON return_type block { $$ = createNode("main_function", $2, $6, $7); } /* Funcao principal 'brocou' */
+    ;
+
+return_type:
+    type { $$ = $1; }
+    | T_NADA { $$ = createNode("type", $1, NULL, NULL); }
+    ;
+
+param_list:
+    /* Vazio */ { $$ = NULL; }
+    | params { $$ = $1; }
+    ;
+
 
 %%
 
