@@ -160,8 +160,6 @@ type:
     | T_OXENTE { $$ = createNode("type", $1, NULL, NULL); }
     ;
 
-
-
 var_declaration_list:
     var_declaration { $$ = createNode("var_declaration_list", NULL, $1, NULL); }
     | var_declaration_list T_COMMA var_declaration { $$ = createNode("var_declaration_list", NULL, $1, $3); }
@@ -198,6 +196,18 @@ assignment_operator:
     | T_DIVIDE_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
     | T_MODULO_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
     ;
+
+/* --- Estruturas de Controle --- */
+if_statement:
+    T_SEPLANTE T_LPAREN expression T_RPAREN block else_part { $$ = createNode("if", NULL, $3, createNode("body", NULL, $5, $6)); }
+    ;
+
+else_part:
+    /* Vazio */ { $$ = NULL; }
+    | T_VANESSA block { $$ = createNode("else", NULL, $2, NULL); }
+    | T_VANESSA if_statement { $$ = createNode("else", NULL, $2, NULL); } /* else if */
+    ;
+
 
 %%
 
