@@ -6,111 +6,46 @@
 
 extern YYSTYPE yylval; // Variavel para comunicar valores ao Bison
 
-// Definições de tokens (podem ser usadas por um parser como Yacc/Bison)
-typedef enum {
-    T_INTEIRO = 1,
-    T_FLUTUANTE,
-    T_LONGO,
-    T_VAR,
-    T_CONST,
-    T_OXE,
-    T_OXENTE,
-    T_BROCOU,
-    T_PEGAVISAO,
-    T_PALETADA,
-    T_BARRIL,
-    T_SEPIQUE,
-    T_SEPLANTE,
-    T_VANESSA,
-    T_NADA, // Adicionado para tipo de retorno de função
-    T_FAZ,   // Adicionado para o do-while
-    T_ENQUANTO, // Adicionado para o while/do-while
+extern FILE* output_file;
 
-    T_PLUS,
-    T_MINUS,
-    T_MULTIPLY,
-    T_DIVIDE,
-    T_MODULO,
-    T_BITWISE_AND,
-    T_BITWISE_OR,
-    T_BITWISE_NOT,
-    T_BITWISE_XOR,
-    T_EQUAL_EQUAL,
-    T_NOT_EQUAL,
-    T_LESS,
-    T_GREATER,
-    T_LESS_EQUAL,
-    T_GREATER_EQUAL,
-    T_ASSIGN,
-    T_POWER, // Adicionado para **
-    T_INCREMENT, // Adicionado para ++
-    T_DECREMENT, // Adicionado para --
-    T_PLUS_ASSIGN, // Adicionado para +=
-    T_MINUS_ASSIGN, // Adicionado para -=
-    T_MULTIPLY_ASSIGN, // Adicionado para *=
-    T_DIVIDE_ASSIGN, // Adicionado para /=
-    T_MODULO_ASSIGN, // Adicionado para %=
-
-    T_LPAREN,
-    T_RPAREN,
-    T_LBRACE,
-    T_RBRACE,
-    T_LBRACKET,
-    T_RBRACKET,
-    T_SEMICOLON,
-    T_COMMA,
-    T_COLON, // Adicionado para parâmetros de função
-
-    T_ID,
-    T_INTEGER_LITERAL,
-    T_FLOAT_LITERAL,
-    T_CHAR_LITERAL,
-    T_STRING_LITERAL,
-
-    T_ERROR,
-    T_EOF
-} TokenType;
 
 // --- Início da Tabela de Símbolos ---
 #define MAX_SYMBOLS 100000        // Número máximo de identificadores na tabela
 #define MAX_ID_LENGTH 256       // Tamanho máximo de um identificador
+#define MAX_TYPE_LENGTH 128    // Tamanho máximo do tipo de um identificador
 
-char symbol_table[MAX_SYMBOLS][MAX_ID_LENGTH]; // Array para armazenar os identificadores
-int symbol_count = 0;                           // Contador de identificadores na tabela
+/* Estrutura para a tabela de símbolos */
+typedef struct {
+    char id[MAX_ID_LENGTH];
+    char type[MAX_TYPE_LENGTH];
+} Identifier;
 
-// Função para obter a posição de um identificador na tabela de símbolos
-// Se o identificador já existe, retorna sua posição.
-// Se não existe, adiciona-o e retorna a nova posição.
-// Retorna -1 em caso de erro (tabela cheia).
-int get_symbol_position(const char* id) {
-    // Procura o identificador na tabela
-    for (int i = 0; i < symbol_count; ++i) {
-        if (strcmp(symbol_table[i], id) == 0) {
-            return i; // Identificador encontrado, retorna sua posição
-        }
+Identifier identifiers[MAX_SYMBOLS];
+int identifier_count = 0;
+
+/* Procura um identificador na tabela de símbolos */
+int find_identifier(char *id) {
+    for (int i = 0; i < identifier_count; i++) {
+        if (strcmp(identifiers[i].id, id) == 0)
+            return i;
     }
+    return -1;
+}
 
-    // Se o identificador não foi encontrado, adiciona-o à tabela
-    if (symbol_count < MAX_SYMBOLS) {
-        strncpy(symbol_table[symbol_count], id, MAX_ID_LENGTH - 1);
-        symbol_table[symbol_count][MAX_ID_LENGTH - 1] = '\0'; // Garante terminação nula
-        return symbol_count++; // Retorna a nova posição e incrementa o contador
+/* Adiciona um identificador à tabela de símbolos */
+void add_identifier(char *id, char *type) {
+    int idx = find_identifier(id);
+    if (idx == -1) {
+        strcpy(identifiers[identifier_count].id, id);
+        strcpy(identifiers[identifier_count].type, type);
+        identifier_count++;
+        fprintf(output_file, "<id, %d> ", identifier_count);
     } else {
-        fprintf(stderr, "Erro: Tabela de símbolos cheia! Não foi possível adicionar '%s'\n", id);
-        return -1; // Indica erro (tabela cheia)
+        fprintf(output_file, "<id, %d> ", idx + 1);
     }
 }
 
-void print_identifier(const char* yytext_val) {
-  printf("ID");
-  int pos = get_symbol_position(yytext_val);
-  if (pos != -1){
-    printf(", %d", pos);
-  }
-
-}
-
-
+//TODO alterar prinf para fprintf (imprimir no arquivo de saida)
 // Função para imprimir o tipo de token (para depuração)
 void print_token(TokenType type, const char* yytext_val) {
     printf("<T_");
@@ -168,8 +103,8 @@ void print_token(TokenType type, const char* yytext_val) {
         case T_COMMA: printf("COMMA"); break;
         case T_COLON: printf("COLON"); break;
 
-        case T_ID: print_identifier(yytext_val); break;
-        case T_INTEGER_LITERAL: printf("INTEGER_LITERAL"); break;
+        case T_ID: add_identifier(yytext_val, "unknown"); break;
+        case T_NUM_LITERAL: printf("NUMBER_LITERAL"); break;
         case T_FLOAT_LITERAL: printf("FLOAT_LITERAL"); break;
         case T_CHAR_LITERAL: printf("CHAR_LITERAL"); break;
         case T_STRING_LITERAL: printf("STRING_LITERAL"); break;
@@ -189,10 +124,9 @@ void print_token(TokenType type, const char* yytext_val) {
 %option noyywrap
 %option yylineno
 
+/* Definicoes de Expressoes Regulares (atalhos) */
 DIGIT       [0-9]+
-LETTER      [a-zA-Z]
-ID          {LETTER}({LETTER}|{DIGIT}|_)*
-INTEGER     {DIGIT}+
+ID          [a-zA-Z_][a-zA-Z0-9]*
 FLOAT       {DIGIT}+\.{DIGIT}+([Ee][+-]?{DIGIT}+)?
 CHAR        '([^'\\\n]|\\.)'
 STRING      \"([^"\\\n]|\\.)*\"
@@ -201,7 +135,15 @@ ML_COMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 WHITESPACE  [ \t\n]+
 
 %%
+    /* --- REGRAS DO ANALISADOR LEXICO --- */
+    /*
+    Quando um padrao eh reconhecido, o codigo na acao correspondente eh executado.
+    'yytext' eh um ponteiro para o texto que casou com o padrao.
+    'strdup(yytext)' cria uma copia da string para que ela nao seja sobrescrita
+    pelo proximo token. O parser sera responsavel por liberar essa memoria.
+    */
 
+    /* Palavras-chave */
 "inteiro"        { print_token(T_INTEIRO, yytext); return T_INTEIRO; }
 "flutuante"      { print_token(T_FLUTUANTE, yytext); return T_FLUTUANTE; }
 "longo"          { print_token(T_LONGO, yytext); return T_LONGO; }
@@ -220,31 +162,41 @@ WHITESPACE  [ \t\n]+
 "faz"            { print_token(T_FAZ, yytext); return T_FAZ; }
 "enquanto"       { print_token(T_ENQUANTO, yytext); return T_ENQUANTO; }
 
-"+"         { print_token(T_PLUS, yytext); return T_PLUS; }
-"-"         { print_token(T_MINUS, yytext); return T_MINUS; }
-"*"         { print_token(T_MULTIPLY, yytext); return T_MULTIPLY; }
-"/"         { print_token(T_DIVIDE, yytext); return T_DIVIDE; }
-"%"         { print_token(T_MODULO, yytext); return T_MODULO; }
-"&"         { print_token(T_BITWISE_AND, yytext); return T_BITWISE_AND; }
-"|"         { print_token(T_BITWISE_OR, yytext); return T_BITWISE_OR; }
-"~"         { print_token(T_BITWISE_NOT, yytext); return T_BITWISE_NOT; }
-"^"         { print_token(T_BITWISE_XOR, yytext); return T_BITWISE_XOR; }
-"=="        { print_token(T_EQUAL_EQUAL, yytext); return T_EQUAL_EQUAL; }
-"!="        { print_token(T_NOT_EQUAL, yytext); return T_NOT_EQUAL; }
-"<"         { print_token(T_LESS, yytext); return T_LESS; }
-">"         { print_token(T_GREATER, yytext); return T_GREATER; }
-"<="        { print_token(T_LESS_EQUAL, yytext); return T_LESS_EQUAL; }
-">="        { print_token(T_GREATER_EQUAL, yytext); return T_GREATER_EQUAL; }
+    /* Operadores de Atribuicao */
 "="         { print_token(T_ASSIGN, yytext); return T_ASSIGN; }
-"**"        { print_token(T_POWER, yytext); return T_POWER; }
-"++"        { print_token(T_INCREMENT, yytext); return T_INCREMENT; }
-"--"        { print_token(T_DECREMENT, yytext); return T_DECREMENT; }
 "+="        { print_token(T_PLUS_ASSIGN, yytext); return T_PLUS_ASSIGN; }
 "-="        { print_token(T_MINUS_ASSIGN, yytext); return T_MINUS_ASSIGN; }
 "*="        { print_token(T_MULTIPLY_ASSIGN, yytext); return T_MULTIPLY_ASSIGN; }
 "/="        { print_token(T_DIVIDE_ASSIGN, yytext); return T_DIVIDE_ASSIGN; }
 "%="        { print_token(T_MODULO_ASSIGN, yytext); return T_MODULO_ASSIGN; }
 
+    /* Operadores Aritmeticos e de Potencia */
+"+"         { print_token(T_PLUS, yytext); return T_PLUS; }
+"-"         { print_token(T_MINUS, yytext); return T_MINUS; }
+"*"         { print_token(T_MULTIPLY, yytext); return T_MULTIPLY; }
+"/"         { print_token(T_DIVIDE, yytext); return T_DIVIDE; }
+"%"         { print_token(T_MODULO, yytext); return T_MODULO; }
+"**"        { print_token(T_POWER, yytext); return T_POWER; }
+
+    /* Operadores de Incremento e Decremento */
+"++"        { print_token(T_INCREMENT, yytext); return T_INCREMENT; }
+"--"        { print_token(T_DECREMENT, yytext); return T_DECREMENT; }
+
+    /* Operadores Relacionais */
+"=="        { print_token(T_EQUAL_EQUAL, yytext); return T_EQUAL_EQUAL; }
+"!="        { print_token(T_NOT_EQUAL, yytext); return T_NOT_EQUAL; }
+"<"         { print_token(T_LESS, yytext); return T_LESS; }
+">"         { print_token(T_GREATER, yytext); return T_GREATER; }
+"<="        { print_token(T_LESS_EQUAL, yytext); return T_LESS_EQUAL; }
+">="        { print_token(T_GREATER_EQUAL, yytext); return T_GREATER_EQUAL; }
+
+    /* Operadores Bitwise */
+"&"         { print_token(T_BITWISE_AND, yytext); return T_BITWISE_AND; }
+"|"         { print_token(T_BITWISE_OR, yytext); return T_BITWISE_OR; }
+"~"         { print_token(T_BITWISE_NOT, yytext); return T_BITWISE_NOT; }
+"^"         { print_token(T_BITWISE_XOR, yytext); return T_BITWISE_XOR; }
+
+    /* Delimitadores */
 "("         { print_token(T_LPAREN, yytext); return T_LPAREN; }
 ")"         { print_token(T_RPAREN, yytext); return T_RPAREN; }
 "{"         { print_token(T_LBRACE, yytext); return T_LBRACE; }
@@ -255,18 +207,41 @@ WHITESPACE  [ \t\n]+
 ","         { print_token(T_COMMA, yytext); return T_COMMA; }
 ":"         { print_token(T_COLON, yytext); return T_COLON; }
 
-{FLOAT}     { print_token(T_FLOAT_LITERAL, yytext); return T_FLOAT_LITERAL; }
-{INTEGER}   { print_token(T_INTEGER_LITERAL, yytext); return T_INTEGER_LITERAL; }
-{CHAR}      { print_token(T_CHAR_LITERAL, yytext); return T_CHAR_LITERAL; }
-{STRING}    { print_token(T_STRING_LITERAL, yytext); return T_STRING_LITERAL; }
 
-{ID}        { print_token(T_ID, yytext); return T_ID; }
-
+    /* Literais */
+{DIGIT}   {
+              yylval.str = strdup(yytext);
+              print_token(T_NUM_LITERAL, yytext);
+              return T_NUM_LITERAL;
+          }
+{FLOAT}   {
+              yylval.str = strdup(yytext);
+              print_token(T_FLOAT_LITERAL, yytext);
+              return T_FLOAT_LITERAL;
+          }
+{STRING}  {
+              yylval.str = strdup(yytext);
+              print_token(T_STRING_LITERAL, yytext);
+              return T_STRING_LITERAL;
+          }
+{CHAR}    {
+              yylval.str = strdup(yytext);
+              print_token(T_CHAR_LITERAL, yytext);
+              return T_CHAR_LITERAL;
+          }
+    /* Identificador */
+{ID}      {
+              yylval.str = strdup(yytext);
+              print_token(T_ID, yytext);
+              return T_ID;
+          }
+    /* Ignorar comentarios e espacos em branco */
 {COMMENT}     { /* Ignora comentários de linha única */ }
 {ML_COMMENT}  { /* Ignora comentários de multiplas linhas */ }
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
-.           { print_token(T_ERROR, yytext); return T_ERROR; }
+    /* Tratamento de erro para caracteres invalidos */
+.           { printf(output_file, "<invalido, %s> ", yytext); return T_ERROR; }
 
 %%
 
