@@ -3,8 +3,8 @@
 Linguagem de programacao imperativa inspirada nas girias baianas.
 
 # Construção da Linguagem
-- [Analisador Léxico (scanner)](lexer/scanner.l)
-- [Analisador Sintático (parser)](parser/paser.y)
+- [Analisador Léxico (scanner)](lexer/README.md)
+- [Analisador Sintático (parser)](parser/README.md)
 
 # Exemplos
 
