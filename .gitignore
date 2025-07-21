@@ -1,4 +1,4 @@
-lexer
+./lexer
 *.yy.c
 *.tab.c
 *.tab.h

@@ -260,6 +260,7 @@ WHITESPACE  [ \t\n]+
 {ID}        { print_token(TOKEN_IDENTIFIER, yytext); return TOKEN_IDENTIFIER; }
 
 {COMMENT}   { /* Ignora comentários de linha única */ }
+{ML_COMMENT} { /* Ignora comentários de multiplas linhas */ }
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
 .           { print_token(TOKEN_ERROR, yytext); return TOKEN_ERROR; }
