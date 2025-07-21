@@ -101,7 +101,6 @@ void print_token(TokenType type, const char* yytext_val) {
         case T_RBRACKET: printf("RBRACKET"); break;
         case T_SEMICOLON: printf("SEMICOLON"); break;
         case T_COMMA: printf("COMMA"); break;
-        case T_COLON: printf("COLON"); break;
 
         case T_ID: add_identifier(yytext_val, "unknown"); break;
         case T_NUM_LITERAL: printf("NUMBER_LITERAL"); break;
