@@ -121,7 +121,6 @@ statement_list:
     | statement_list statement { $$ = createNode("statement_list", NULL, $1, $2); }
     ;
 
-
 statement:
     declaration { $$ = $1; }
     | assignment T_SEMICOLON { $$ = $1; }
@@ -140,7 +139,6 @@ block:
     T_LBRACE statement_list T_RBRACE { $$ = createNode("block", NULL, $2, NULL); }
     | T_LBRACE T_RBRACE { $$ = createNode("block", NULL, NULL, NULL); }
     ;
-
 
 /* --- Declaracao de Variaveis --- */
 declaration:
@@ -176,7 +174,6 @@ var_declaration:
 var_initializer:
     T_ASSIGN expression { $$ = createNode("initializer", NULL, $2, NULL); }
     ;
-
 
 /* --- Atribuicao --- */
 assignment:
