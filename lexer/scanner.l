@@ -5,67 +5,67 @@
 
 // Definições de tokens (podem ser usadas por um parser como Yacc/Bison)
 typedef enum {
-    TOKEN_KEYWORD_INTEIRO = 1,
-    TOKEN_KEYWORD_FLUTUANTE,
-    TOKEN_KEYWORD_LONGO,
-    TOKEN_KEYWORD_VAR,
-    TOKEN_KEYWORD_CONST,
-    TOKEN_KEYWORD_OXE,
-    TOKEN_KEYWORD_OXENTE,
-    TOKEN_KEYWORD_BROCOU,
-    TOKEN_KEYWORD_PEGAVISAO,
-    TOKEN_KEYWORD_PALETADA,
-    TOKEN_KEYWORD_BARRIL,
-    TOKEN_KEYWORD_SEPIQUE,
-    TOKEN_KEYWORD_SEPLANTE,
-    TOKEN_KEYWORD_VANESSA,
-    TOKEN_KEYWORD_NADA, // Adicionado para tipo de retorno de função
-    TOKEN_KEYWORD_FAZ,   // Adicionado para o do-while
-    TOKEN_KEYWORD_ENQUANTO, // Adicionado para o while/do-while
+    T_INTEIRO = 1,
+    T_FLUTUANTE,
+    T_LONGO,
+    T_VAR,
+    T_CONST,
+    T_OXE,
+    T_OXENTE,
+    T_BROCOU,
+    T_PEGAVISAO,
+    T_PALETADA,
+    T_BARRIL,
+    T_SEPIQUE,
+    T_SEPLANTE,
+    T_VANESSA,
+    T_NADA, // Adicionado para tipo de retorno de função
+    T_FAZ,   // Adicionado para o do-while
+    T_ENQUANTO, // Adicionado para o while/do-while
 
-    TOKEN_OPERATOR_PLUS,
-    TOKEN_OPERATOR_MINUS,
-    TOKEN_OPERATOR_MULTIPLY,
-    TOKEN_OPERATOR_DIVIDE,
-    TOKEN_OPERATOR_MODULO,
-    TOKEN_OPERATOR_BITWISE_AND,
-    TOKEN_OPERATOR_BITWISE_OR,
-    TOKEN_OPERATOR_BITWISE_NOT,
-    TOKEN_OPERATOR_BITWISE_XOR,
-    TOKEN_OPERATOR_EQUAL_EQUAL,
-    TOKEN_OPERATOR_NOT_EQUAL,
-    TOKEN_OPERATOR_LESS,
-    TOKEN_OPERATOR_GREATER,
-    TOKEN_OPERATOR_LESS_EQUAL,
-    TOKEN_OPERATOR_GREATER_EQUAL,
-    TOKEN_OPERATOR_ASSIGN,
-    TOKEN_OPERATOR_POWER, // Adicionado para **
-    TOKEN_OPERATOR_INCREMENT, // Adicionado para ++
-    TOKEN_OPERATOR_DECREMENT, // Adicionado para --
-    TOKEN_OPERATOR_PLUS_ASSIGN, // Adicionado para +=
-    TOKEN_OPERATOR_MINUS_ASSIGN, // Adicionado para -=
-    TOKEN_OPERATOR_MULTIPLY_ASSIGN, // Adicionado para *=
-    TOKEN_OPERATOR_DIVIDE_ASSIGN, // Adicionado para /=
-    TOKEN_OPERATOR_MODULO_ASSIGN, // Adicionado para %=
+    T_PLUS,
+    T_MINUS,
+    T_MULTIPLY,
+    T_DIVIDE,
+    T_MODULO,
+    T_BITWISE_AND,
+    T_BITWISE_OR,
+    T_BITWISE_NOT,
+    T_BITWISE_XOR,
+    T_EQUAL_EQUAL,
+    T_NOT_EQUAL,
+    T_LESS,
+    T_GREATER,
+    T_LESS_EQUAL,
+    T_GREATER_EQUAL,
+    T_ASSIGN,
+    T_POWER, // Adicionado para **
+    T_INCREMENT, // Adicionado para ++
+    T_DECREMENT, // Adicionado para --
+    T_PLUS_ASSIGN, // Adicionado para +=
+    T_MINUS_ASSIGN, // Adicionado para -=
+    T_MULTIPLY_ASSIGN, // Adicionado para *=
+    T_DIVIDE_ASSIGN, // Adicionado para /=
+    T_MODULO_ASSIGN, // Adicionado para %=
 
-    TOKEN_DELIMITER_LPAREN,
-    TOKEN_DELIMITER_RPAREN,
-    TOKEN_DELIMITER_LBRACE,
-    TOKEN_DELIMITER_RBRACE,
-    TOKEN_DELIMITER_LBRACKET,
-    TOKEN_DELIMITER_RBRACKET,
-    TOKEN_DELIMITER_SEMICOLON,
-    TOKEN_DELIMITER_COMMA,
-    TOKEN_DELIMITER_COLON, // Adicionado para parâmetros de função
+    T_LPAREN,
+    T_RPAREN,
+    T_LBRACE,
+    T_RBRACE,
+    T_LBRACKET,
+    T_RBRACKET,
+    T_SEMICOLON,
+    T_COMMA,
+    T_COLON, // Adicionado para parâmetros de função
 
-    TOKEN_IDENTIFIER,
-    TOKEN_INTEGER_LITERAL,
-    TOKEN_FLOAT_LITERAL,
-    TOKEN_CHAR_LITERAL,
-    TOKEN_STRING_LITERAL,
+    T_ID,
+    T_INTEGER_LITERAL,
+    T_FLOAT_LITERAL,
+    T_CHAR_LITERAL,
+    T_STRING_LITERAL,
 
-    TOKEN_ERROR,
-    TOKEN_EOF
+    T_ERROR,
+    T_EOF
 } TokenType;
 
 // --- Início da Tabela de Símbolos ---
@@ -110,69 +110,69 @@ void print_identifier(const char* yytext_val) {
 
 // Função para imprimir o tipo de token (para depuração)
 void print_token(TokenType type, const char* yytext_val) {
-    printf("<TOKEN_");
+    printf("<T_");
     switch (type) {
-        case TOKEN_KEYWORD_INTEIRO: printf("INTEIRO"); break;
-        case TOKEN_KEYWORD_FLUTUANTE: printf("FLUTUANTE"); break;
-        case TOKEN_KEYWORD_LONGO: printf("LONGO"); break;
-        case TOKEN_KEYWORD_VAR: printf("VAR"); break;
-        case TOKEN_KEYWORD_CONST: printf("CONST"); break;
-        case TOKEN_KEYWORD_OXE: printf("OXE"); break;
-        case TOKEN_KEYWORD_OXENTE: printf("OXENTE"); break;
-        case TOKEN_KEYWORD_BROCOU: printf("BROCOU"); break;
-        case TOKEN_KEYWORD_PEGAVISAO: printf("PEGAVISAO"); break;
-        case TOKEN_KEYWORD_PALETADA: printf("PALETADA"); break;
-        case TOKEN_KEYWORD_BARRIL: printf("BARRIL"); break;
-        case TOKEN_KEYWORD_SEPIQUE: printf("SEPIQUE"); break;
-        case TOKEN_KEYWORD_SEPLANTE: printf("SEPLANTE"); break;
-        case TOKEN_KEYWORD_VANESSA: printf("VANESSA"); break;
-        case TOKEN_KEYWORD_NADA: printf("NADA"); break;
-        case TOKEN_KEYWORD_FAZ: printf("FAZ"); break;
-        case TOKEN_KEYWORD_ENQUANTO: printf("ENQUANTO"); break;
+        case T_INTEIRO: printf("INTEIRO"); break;
+        case T_FLUTUANTE: printf("FLUTUANTE"); break;
+        case T_LONGO: printf("LONGO"); break;
+        case T_VAR: printf("VAR"); break;
+        case T_CONST: printf("CONST"); break;
+        case T_OXE: printf("OXE"); break;
+        case T_OXENTE: printf("OXENTE"); break;
+        case T_BROCOU: printf("BROCOU"); break;
+        case T_PEGAVISAO: printf("PEGAVISAO"); break;
+        case T_PALETADA: printf("PALETADA"); break;
+        case T_BARRIL: printf("BARRIL"); break;
+        case T_SEPIQUE: printf("SEPIQUE"); break;
+        case T_SEPLANTE: printf("SEPLANTE"); break;
+        case T_VANESSA: printf("VANESSA"); break;
+        case T_NADA: printf("NADA"); break;
+        case T_FAZ: printf("FAZ"); break;
+        case T_ENQUANTO: printf("ENQUANTO"); break;
 
-        case TOKEN_OPERATOR_PLUS: printf("PLUS"); break;
-        case TOKEN_OPERATOR_MINUS: printf("MINUS"); break;
-        case TOKEN_OPERATOR_MULTIPLY: printf("MULTIPLY"); break;
-        case TOKEN_OPERATOR_DIVIDE: printf("DIVIDE"); break;
-        case TOKEN_OPERATOR_MODULO: printf("MODULO"); break;
-        case TOKEN_OPERATOR_BITWISE_AND: printf("BITWISE_AND"); break;
-        case TOKEN_OPERATOR_BITWISE_OR: printf("BITWISE_OR"); break;
-        case TOKEN_OPERATOR_BITWISE_NOT: printf("BITWISE_NOT"); break;
-        case TOKEN_OPERATOR_BITWISE_XOR: printf("BITWISE_XOR"); break;
-        case TOKEN_OPERATOR_EQUAL_EQUAL: printf("EQUAL_EQUAL"); break;
-        case TOKEN_OPERATOR_NOT_EQUAL: printf("NOT_EQUAL"); break;
-        case TOKEN_OPERATOR_LESS: printf("LESS"); break;
-        case TOKEN_OPERATOR_GREATER: printf("GREATER"); break;
-        case TOKEN_OPERATOR_LESS_EQUAL: printf("LESS_EQUAL"); break;
-        case TOKEN_OPERATOR_GREATER_EQUAL: printf("GREATER_EQUAL"); break;
-        case TOKEN_OPERATOR_ASSIGN: printf("ASSIGN"); break;
-        case TOKEN_OPERATOR_POWER: printf("POWER"); break;
-        case TOKEN_OPERATOR_INCREMENT: printf("INCREMENT"); break;
-        case TOKEN_OPERATOR_DECREMENT: printf("DECREMENT"); break;
-        case TOKEN_OPERATOR_PLUS_ASSIGN: printf("PLUS_ASSIGN"); break;
-        case TOKEN_OPERATOR_MINUS_ASSIGN: printf("MINUS_ASSIGN"); break;
-        case TOKEN_OPERATOR_MULTIPLY_ASSIGN: printf("MULTIPLY_ASSIGN"); break;
-        case TOKEN_OPERATOR_DIVIDE_ASSIGN: printf("DIVIDE_ASSIGN"); break;
-        case TOKEN_OPERATOR_MODULO_ASSIGN: printf("MODULO_ASSIGN"); break;
+        case T_PLUS: printf("PLUS"); break;
+        case T_MINUS: printf("MINUS"); break;
+        case T_MULTIPLY: printf("MULTIPLY"); break;
+        case T_DIVIDE: printf("DIVIDE"); break;
+        case T_MODULO: printf("MODULO"); break;
+        case T_BITWISE_AND: printf("BITWISE_AND"); break;
+        case T_BITWISE_OR: printf("BITWISE_OR"); break;
+        case T_BITWISE_NOT: printf("BITWISE_NOT"); break;
+        case T_BITWISE_XOR: printf("BITWISE_XOR"); break;
+        case T_EQUAL_EQUAL: printf("EQUAL_EQUAL"); break;
+        case T_NOT_EQUAL: printf("NOT_EQUAL"); break;
+        case T_LESS: printf("LESS"); break;
+        case T_GREATER: printf("GREATER"); break;
+        case T_LESS_EQUAL: printf("LESS_EQUAL"); break;
+        case T_GREATER_EQUAL: printf("GREATER_EQUAL"); break;
+        case T_ASSIGN: printf("ASSIGN"); break;
+        case T_POWER: printf("POWER"); break;
+        case T_INCREMENT: printf("INCREMENT"); break;
+        case T_DECREMENT: printf("DECREMENT"); break;
+        case T_PLUS_ASSIGN: printf("PLUS_ASSIGN"); break;
+        case T_MINUS_ASSIGN: printf("MINUS_ASSIGN"); break;
+        case T_MULTIPLY_ASSIGN: printf("MULTIPLY_ASSIGN"); break;
+        case T_DIVIDE_ASSIGN: printf("DIVIDE_ASSIGN"); break;
+        case T_MODULO_ASSIGN: printf("MODULO_ASSIGN"); break;
 
-        case TOKEN_DELIMITER_LPAREN: printf("LPAREN"); break;
-        case TOKEN_DELIMITER_RPAREN: printf("RPAREN"); break;
-        case TOKEN_DELIMITER_LBRACE: printf("LBRACE"); break;
-        case TOKEN_DELIMITER_RBRACE: printf("RBRACE"); break;
-        case TOKEN_DELIMITER_LBRACKET: printf("LBRACKET"); break;
-        case TOKEN_DELIMITER_RBRACKET: printf("RBRACKET"); break;
-        case TOKEN_DELIMITER_SEMICOLON: printf("SEMICOLON"); break;
-        case TOKEN_DELIMITER_COMMA: printf("COMMA"); break;
-        case TOKEN_DELIMITER_COLON: printf("COLON"); break;
+        case T_LPAREN: printf("LPAREN"); break;
+        case T_RPAREN: printf("RPAREN"); break;
+        case T_LBRACE: printf("LBRACE"); break;
+        case T_RBRACE: printf("RBRACE"); break;
+        case T_LBRACKET: printf("LBRACKET"); break;
+        case T_RBRACKET: printf("RBRACKET"); break;
+        case T_SEMICOLON: printf("SEMICOLON"); break;
+        case T_COMMA: printf("COMMA"); break;
+        case T_COLON: printf("COLON"); break;
 
-        case TOKEN_IDENTIFIER: print_identifier(yytext_val); break;
-        case TOKEN_INTEGER_LITERAL: printf("INTEGER_LITERAL"); break;
-        case TOKEN_FLOAT_LITERAL: printf("FLOAT_LITERAL"); break;
-        case TOKEN_CHAR_LITERAL: printf("CHAR_LITERAL"); break;
-        case TOKEN_STRING_LITERAL: printf("STRING_LITERAL"); break;
+        case T_ID: print_identifier(yytext_val); break;
+        case T_INTEGER_LITERAL: printf("INTEGER_LITERAL"); break;
+        case T_FLOAT_LITERAL: printf("FLOAT_LITERAL"); break;
+        case T_CHAR_LITERAL: printf("CHAR_LITERAL"); break;
+        case T_STRING_LITERAL: printf("STRING_LITERAL"); break;
 
-        case TOKEN_ERROR: printf("ERROR"); break;
-        case TOKEN_EOF: printf("EOF"); break;
+        case T_ERROR: printf("ERROR"); break;
+        case T_EOF: printf("EOF"); break;
         default: printf("UNKNOWN"); break;
     }
     if (yytext_val) {
@@ -199,71 +199,71 @@ WHITESPACE  [ \t\n]+
 
 %%
 
-"inteiro"   { print_token(TOKEN_KEYWORD_INTEIRO, yytext); return TOKEN_KEYWORD_INTEIRO; }
-"flutuante" { print_token(TOKEN_KEYWORD_FLUTUANTE, yytext); return TOKEN_KEYWORD_FLUTUANTE; }
-"longo"     { print_token(TOKEN_KEYWORD_LONGO, yytext); return TOKEN_KEYWORD_LONGO; }
-"var"    { print_token(TOKEN_KEYWORD_VAR, yytext); return TOKEN_KEYWORD_VAR; }
-"const"     { print_token(TOKEN_KEYWORD_CONST, yytext); return TOKEN_KEYWORD_CONST; }
-"oxe"       { print_token(TOKEN_KEYWORD_OXE, yytext); return TOKEN_KEYWORD_OXE; }
-"oxente"    { print_token(TOKEN_KEYWORD_OXENTE, yytext); return TOKEN_KEYWORD_OXENTE; }
-"brocou"    { print_token(TOKEN_KEYWORD_BROCOU, yytext); return TOKEN_KEYWORD_BROCOU; }
-"pegaVisao"      { print_token(TOKEN_KEYWORD_PEGAVISAO, yytext); return TOKEN_KEYWORD_PEGAVISAO; }
-"paletada"  { print_token(TOKEN_KEYWORD_PALETADA, yytext); return TOKEN_KEYWORD_PALETADA; }
-"barril"    { print_token(TOKEN_KEYWORD_BARRIL, yytext); return TOKEN_KEYWORD_BARRIL; }
-"sePique"  { print_token(TOKEN_KEYWORD_SEPIQUE, yytext); return TOKEN_KEYWORD_SEPIQUE; }
-"sePlante" { print_token(TOKEN_KEYWORD_SEPLANTE, yytext); return TOKEN_KEYWORD_SEPLANTE; }
-"vaNessa"  { print_token(TOKEN_KEYWORD_VANESSA, yytext); return TOKEN_KEYWORD_VANESSA; }
-"nada"      { print_token(TOKEN_KEYWORD_NADA, yytext); return TOKEN_KEYWORD_NADA; }
-"faz"        { print_token(TOKEN_KEYWORD_FAZ, yytext); return TOKEN_KEYWORD_FAZ; }
-"enquanto"     { print_token(TOKEN_KEYWORD_ENQUANTO, yytext); return TOKEN_KEYWORD_ENQUANTO; }
+"inteiro"   { print_token(T_INTEIRO, yytext); return T_INTEIRO; }
+"flutuante" { print_token(T_FLUTUANTE, yytext); return T_FLUTUANTE; }
+"longo"     { print_token(T_LONGO, yytext); return T_LONGO; }
+"var"    { print_token(T_VAR, yytext); return T_VAR; }
+"const"     { print_token(T_CONST, yytext); return T_CONST; }
+"oxe"       { print_token(T_OXE, yytext); return T_OXE; }
+"oxente"    { print_token(T_OXENTE, yytext); return T_OXENTE; }
+"brocou"    { print_token(T_BROCOU, yytext); return T_BROCOU; }
+"pegaVisao"      { print_token(T_PEGAVISAO, yytext); return T_PEGAVISAO; }
+"paletada"  { print_token(T_PALETADA, yytext); return T_PALETADA; }
+"barril"    { print_token(T_BARRIL, yytext); return T_BARRIL; }
+"sePique"  { print_token(T_SEPIQUE, yytext); return T_SEPIQUE; }
+"sePlante" { print_token(T_SEPLANTE, yytext); return T_SEPLANTE; }
+"vaNessa"  { print_token(T_VANESSA, yytext); return T_VANESSA; }
+"nada"      { print_token(T_NADA, yytext); return T_NADA; }
+"faz"        { print_token(T_FAZ, yytext); return T_FAZ; }
+"enquanto"     { print_token(T_ENQUANTO, yytext); return T_ENQUANTO; }
 
-"+"         { print_token(TOKEN_OPERATOR_PLUS, yytext); return TOKEN_OPERATOR_PLUS; }
-"-"         { print_token(TOKEN_OPERATOR_MINUS, yytext); return TOKEN_OPERATOR_MINUS; }
-"*"         { print_token(TOKEN_OPERATOR_MULTIPLY, yytext); return TOKEN_OPERATOR_MULTIPLY; }
-"/"         { print_token(TOKEN_OPERATOR_DIVIDE, yytext); return TOKEN_OPERATOR_DIVIDE; }
-"%"         { print_token(TOKEN_OPERATOR_MODULO, yytext); return TOKEN_OPERATOR_MODULO; }
-"&"         { print_token(TOKEN_OPERATOR_BITWISE_AND, yytext); return TOKEN_OPERATOR_BITWISE_AND; }
-"|"         { print_token(TOKEN_OPERATOR_BITWISE_OR, yytext); return TOKEN_OPERATOR_BITWISE_OR; }
-"~"         { print_token(TOKEN_OPERATOR_BITWISE_NOT, yytext); return TOKEN_OPERATOR_BITWISE_NOT; }
-"^"         { print_token(TOKEN_OPERATOR_BITWISE_XOR, yytext); return TOKEN_OPERATOR_BITWISE_XOR; }
-"=="        { print_token(TOKEN_OPERATOR_EQUAL_EQUAL, yytext); return TOKEN_OPERATOR_EQUAL_EQUAL; }
-"!="        { print_token(TOKEN_OPERATOR_NOT_EQUAL, yytext); return TOKEN_OPERATOR_NOT_EQUAL; }
-"<"         { print_token(TOKEN_OPERATOR_LESS, yytext); return TOKEN_OPERATOR_LESS; }
-">"         { print_token(TOKEN_OPERATOR_GREATER, yytext); return TOKEN_OPERATOR_GREATER; }
-"<="        { print_token(TOKEN_OPERATOR_LESS_EQUAL, yytext); return TOKEN_OPERATOR_LESS_EQUAL; }
-">="        { print_token(TOKEN_OPERATOR_GREATER_EQUAL, yytext); return TOKEN_OPERATOR_GREATER_EQUAL; }
-"="         { print_token(TOKEN_OPERATOR_ASSIGN, yytext); return TOKEN_OPERATOR_ASSIGN; }
-"**"        { print_token(TOKEN_OPERATOR_POWER, yytext); return TOKEN_OPERATOR_POWER; }
-"++"        { print_token(TOKEN_OPERATOR_INCREMENT, yytext); return TOKEN_OPERATOR_INCREMENT; }
-"--"        { print_token(TOKEN_OPERATOR_DECREMENT, yytext); return TOKEN_OPERATOR_DECREMENT; }
-"+="        { print_token(TOKEN_OPERATOR_PLUS_ASSIGN, yytext); return TOKEN_OPERATOR_PLUS_ASSIGN; }
-"-="        { print_token(TOKEN_OPERATOR_MINUS_ASSIGN, yytext); return TOKEN_OPERATOR_MINUS_ASSIGN; }
-"*="        { print_token(TOKEN_OPERATOR_MULTIPLY_ASSIGN, yytext); return TOKEN_OPERATOR_MULTIPLY_ASSIGN; }
-"/="        { print_token(TOKEN_OPERATOR_DIVIDE_ASSIGN, yytext); return TOKEN_OPERATOR_DIVIDE_ASSIGN; }
-"%="        { print_token(TOKEN_OPERATOR_MODULO_ASSIGN, yytext); return TOKEN_OPERATOR_MODULO_ASSIGN; }
+"+"         { print_token(T_PLUS, yytext); return T_PLUS; }
+"-"         { print_token(T_MINUS, yytext); return T_MINUS; }
+"*"         { print_token(T_MULTIPLY, yytext); return T_MULTIPLY; }
+"/"         { print_token(T_DIVIDE, yytext); return T_DIVIDE; }
+"%"         { print_token(T_MODULO, yytext); return T_MODULO; }
+"&"         { print_token(T_BITWISE_AND, yytext); return T_BITWISE_AND; }
+"|"         { print_token(T_BITWISE_OR, yytext); return T_BITWISE_OR; }
+"~"         { print_token(T_BITWISE_NOT, yytext); return T_BITWISE_NOT; }
+"^"         { print_token(T_BITWISE_XOR, yytext); return T_BITWISE_XOR; }
+"=="        { print_token(T_EQUAL_EQUAL, yytext); return T_EQUAL_EQUAL; }
+"!="        { print_token(T_NOT_EQUAL, yytext); return T_NOT_EQUAL; }
+"<"         { print_token(T_LESS, yytext); return T_LESS; }
+">"         { print_token(T_GREATER, yytext); return T_GREATER; }
+"<="        { print_token(T_LESS_EQUAL, yytext); return T_LESS_EQUAL; }
+">="        { print_token(T_GREATER_EQUAL, yytext); return T_GREATER_EQUAL; }
+"="         { print_token(T_ASSIGN, yytext); return T_ASSIGN; }
+"**"        { print_token(T_POWER, yytext); return T_POWER; }
+"++"        { print_token(T_INCREMENT, yytext); return T_INCREMENT; }
+"--"        { print_token(T_DECREMENT, yytext); return T_DECREMENT; }
+"+="        { print_token(T_PLUS_ASSIGN, yytext); return T_PLUS_ASSIGN; }
+"-="        { print_token(T_MINUS_ASSIGN, yytext); return T_MINUS_ASSIGN; }
+"*="        { print_token(T_MULTIPLY_ASSIGN, yytext); return T_MULTIPLY_ASSIGN; }
+"/="        { print_token(T_DIVIDE_ASSIGN, yytext); return T_DIVIDE_ASSIGN; }
+"%="        { print_token(T_MODULO_ASSIGN, yytext); return T_MODULO_ASSIGN; }
 
-"("         { print_token(TOKEN_DELIMITER_LPAREN, yytext); return TOKEN_DELIMITER_LPAREN; }
-")"         { print_token(TOKEN_DELIMITER_RPAREN, yytext); return TOKEN_DELIMITER_RPAREN; }
-"{"         { print_token(TOKEN_DELIMITER_LBRACE, yytext); return TOKEN_DELIMITER_LBRACE; }
-"}"         { print_token(TOKEN_DELIMITER_RBRACE, yytext); return TOKEN_DELIMITER_RBRACE; }
-"["         { print_token(TOKEN_DELIMITER_LBRACKET, yytext); return TOKEN_DELIMITER_LBRACKET; }
-"]"         { print_token(TOKEN_DELIMITER_RBRACKET, yytext); return TOKEN_DELIMITER_RBRACKET; }
-";"         { print_token(TOKEN_DELIMITER_SEMICOLON, yytext); return TOKEN_DELIMITER_SEMICOLON; }
-","         { print_token(TOKEN_DELIMITER_COMMA, yytext); return TOKEN_DELIMITER_COMMA; }
-":"         { print_token(TOKEN_DELIMITER_COLON, yytext); return TOKEN_DELIMITER_COLON; }
+"("         { print_token(T_LPAREN, yytext); return T_LPAREN; }
+")"         { print_token(T_RPAREN, yytext); return T_RPAREN; }
+"{"         { print_token(T_LBRACE, yytext); return T_LBRACE; }
+"}"         { print_token(T_RBRACE, yytext); return T_RBRACE; }
+"["         { print_token(T_LBRACKET, yytext); return T_LBRACKET; }
+"]"         { print_token(T_RBRACKET, yytext); return T_RBRACKET; }
+";"         { print_token(T_SEMICOLON, yytext); return T_SEMICOLON; }
+","         { print_token(T_COMMA, yytext); return T_COMMA; }
+":"         { print_token(T_COLON, yytext); return T_COLON; }
 
-{FLOAT}     { print_token(TOKEN_FLOAT_LITERAL, yytext); return TOKEN_FLOAT_LITERAL; }
-{INTEGER}   { print_token(TOKEN_INTEGER_LITERAL, yytext); return TOKEN_INTEGER_LITERAL; }
-{CHAR}      { print_token(TOKEN_CHAR_LITERAL, yytext); return TOKEN_CHAR_LITERAL; }
-{STRING}    { print_token(TOKEN_STRING_LITERAL, yytext); return TOKEN_STRING_LITERAL; }
+{FLOAT}     { print_token(T_FLOAT_LITERAL, yytext); return T_FLOAT_LITERAL; }
+{INTEGER}   { print_token(T_INTEGER_LITERAL, yytext); return T_INTEGER_LITERAL; }
+{CHAR}      { print_token(T_CHAR_LITERAL, yytext); return T_CHAR_LITERAL; }
+{STRING}    { print_token(T_STRING_LITERAL, yytext); return T_STRING_LITERAL; }
 
-{ID}        { print_token(TOKEN_IDENTIFIER, yytext); return TOKEN_IDENTIFIER; }
+{ID}        { print_token(T_ID, yytext); return T_ID; }
 
 {COMMENT}   { /* Ignora comentários de linha única */ }
 {ML_COMMENT} { /* Ignora comentários de multiplas linhas */ }
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
-.           { print_token(TOKEN_ERROR, yytext); return TOKEN_ERROR; }
+.           { print_token(T_ERROR, yytext); return T_ERROR; }
 
 %%
 
@@ -286,6 +286,6 @@ int main(int argc, char **argv) {
         fclose(yyin);
     }
 
-    print_token(TOKEN_EOF, NULL); // Sinaliza o fim do arquivo
+    print_token(T_EOF, NULL); // Sinaliza o fim do arquivo
     return 0;
 }
