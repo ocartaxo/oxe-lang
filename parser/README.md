@@ -1,1 +1,1 @@
-# Analisador Sintático(*Parser*)
+# Analisador Sintático (*Parser*)
