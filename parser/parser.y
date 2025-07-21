@@ -276,6 +276,43 @@ return_statement:
     T_SEPIQUE expression { $$ = createNode("return", NULL, $2, NULL); }
     ;
 
+/* --- Expressoes --- */
+expression:
+    primary_expression { $$ = $1; }
+    | expression T_PLUS expression { $$ = createNode("binary_op", "+", $1, $3); }
+    | expression T_MINUS expression { $$ = createNode("binary_op", "-", $1, $3); }
+    | expression T_MULTIPLY expression { $$ = createNode("binary_op", "*", $1, $3); }
+    | expression T_DIVIDE expression { $$ = createNode("binary_op", "/", $1, $3); }
+    | expression T_MODULO expression { $$ = createNode("binary_op", "%", $1, $3); }
+    | expression T_POWER expression { $$ = createNode("binary_op", "**", $1, $3); }
+    | expression T_EQUAL_EQUAL expression { $$ = createNode("binary_op", "==", $1, $3); }
+    | expression T_NOT_EQUAL expression { $$ = createNode("binary_op", "!=", $1, $3); }
+    | expression T_LESS expression { $$ = createNode("binary_op", "<", $1, $3); }
+    | expression T_GREATER expression { $$ = createNode("binary_op", ">", $1, $3); }
+    | expression T_LESS_EQUAL expression { $$ = createNode("binary_op", "<=", $1, $3); }
+    | expression T_GREATER_EQUAL expression { $$ = createNode("binary_op", ">=", $1, $3); }
+    | expression T_BITWISE_AND expression { $$ = createNode("binary_op", "&", $1, $3); }
+    | expression T_BITWISE_OR expression { $$ = createNode("binary_op", "|", $1, $3); }
+    | expression T_BITWISE_XOR expression { $$ = createNode("binary_op", "^", $1, $3); }
+    | T_MINUS expression %prec T_BITWISE_NOT { $$ = createNode("unary_op", "-", $2, NULL); } /* Negacao unaria */
+    | T_BITWISE_NOT expression { $$ = createNode("unary_op", "~", $2, NULL); }
+    ;
+
+primary_expression:
+    T_ID { $$ = createNode("identifier", $1, NULL, NULL); }
+    | literal { $$ = $1; }
+    | T_LPAREN expression T_RPAREN { $$ = $2; }
+    | function_call { $$ = $1; }
+    | T_ID T_LBRACKET expression T_RBRACKET { $$ = createNode("array_access", $1, $3, NULL); }
+    ;
+
+literal:
+    T_INTEGER_LITERAL { $$ = createNode("integer_literal", $1, NULL, NULL); }
+    | T_FLOAT_LITERAL { $$ = createNode("float_literal", $1, NULL, NULL); }
+    | T_CHAR_LITERAL { $$ = createNode("char_literal", $1, NULL, NULL); }
+    | T_STRING_LITERAL { $$ = createNode("string_literal", $1, NULL, NULL); }
+    ;
+
 %%
 
 /* Codigo C auxiliar */
@@ -312,6 +349,7 @@ void printTreeInStd(int level, Node* root) {
     printTreeInStd(root->left, level);
     return;
   }
+
   /*
   printf("%*s", level, " "); <----- utilizando o padding do printf
   for(int i = 0; i < level, i++)
@@ -340,6 +378,7 @@ void printTreeInFile(Node* root, FILE* out, int level) {
    for (int i = 0; i < level; i++)
          fprintf(out, "  ");
   */
+  
   fprintf(out, "%*s", level, " "); // <----- utilizando o padding do printf
   if(strlen(root->value) > 0)
     fprintf(out, "%s (%s)\n",root->name, root->value);
@@ -362,4 +401,9 @@ void yyerror(const char* s) {
   fprintf(stderr, "Erro de sintaxe na linha %d: %s\n", yylineno, s);
 }
 
-int yylex();
+int main(void) {
+
+  
+
+  return 0;
+}
