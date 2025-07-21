@@ -12,7 +12,7 @@ LEX = flex
 LDLIBS = -ll
 
 # Nome do seu arquivo fonte .l
-LEX_SRC = lexer/oxelang_lexer.l 
+LEX_SRC = lexer/scanner.l 
 # Nome do arquivo fonte .y
 SIN_SRC = parser/parser.y
 
