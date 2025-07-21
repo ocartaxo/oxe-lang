@@ -249,19 +249,38 @@ param_list:
     | params { $$ = $1; }
     ;
 
+params:
+    T_ID T_COLON type { $$ = createNode("param", $1, $3, NULL); }
+    | params T_COMMA T_ID T_COLON type { $$ = createNode("param_list", NULL, $1, createNode("param", $3, $5, NULL)); }
+    ;
+
+function_call:
+    T_ID T_LPAREN arg_list T_RPAREN { $$ = createNode("function_call", $1, $3, NULL); }
+    ;
+
+arg_list:
+    /* Vazio */ { $$ = NULL; }
+    | args { $$ = $1; }
+    ;
+
+args:
+    expression { $$ = createNode("arg_list", NULL, $1, NULL); }
+    | args T_COMMA expression { $$ = createNode("arg_list", NULL, $1, $3); }
+    ;
+
+print_statement:
+    T_PEGAVISAO T_LPAREN expression T_RPAREN { $$ = createNode("print", NULL, $3, NULL); }
+    ;
+
+return_statement:
+    T_SEPIQUE expression { $$ = createNode("return", NULL, $2, NULL); }
+    ;
 
 %%
 
+/* Codigo C auxiliar */
 
-FILE* output_file;
-
-typedef struct Node {
-  char name[50];
-  char value[50];
-  struct Node* left;
-  struct Node* right;
-} Node;
-
+/* Funcao para criar um novo no da AST */
 Node* createNode(char* name, char* value, Node* left, Node* right) {
   Node* newNode = (Node*)malloc(sizeOf(Node));
   if (!newNode) {
