@@ -5,41 +5,55 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Nome do Flex
-LEX = flex
+FLEX = flex
 
 # Bibliotecas a serem lincadas (a biblioteca do Flex é -lfl ou -ll)
 # -lfl é mais comum em sistemas Linux modernos.
 LDLIBS = -ll
 
+# Bison
+BISON = bison
+BISON_FLG = -d -y
+
 # Nome do seu arquivo fonte .l
-LEX_SRC = lexer/scanner.l 
+SCANNER = lexer/scanner.l 
 # Nome do arquivo fonte .y
-SIN_SRC = parser/parser.y
+PARSER = parser/parser.y
 
 # Nome do arquivo C gerado pelo Flex (padrão é lex.yy.c)
-C_SRC = lex.yy.c
+FLEX_SRC = lex.yy.c
+# Nome do arquivo C gerado pelo Bison
+BISON_SRC = parser.tab.c
 
 # Nome do executável final
-TARGET = lexer
+TARGET_LEXER = lexer
+
+TARGET_PARSER = gramma
+
+TARGET = arvore_sintatica
 
 # Alvo padrão: o que é construído quando você apenas digita "make"
 all: $(TARGET)
 
 # Regra para criar o executável final a partir do arquivo C gerado
-# Ele depende do arquivo C_SRC
-$(TARGET): $(C_SRC)
-	@$(CC) $(CFLAGS) -o $(TARGET) $(C_SRC) $(LDLIBS)
-	@rm $(C_SRC)
+# Ele depende do arquivo FLEX_SRC
+$(TARGET): $(BINSON_SRC) $(FLEX_SRC)
+	@$(CC) $(CFLAGS) -o $(TARGET) $(FLEX_SRC) $(LDLIBS)
+	@rm $(FLEX_SRC)
 
-# Regra para criar o arquivo C_SRC a partir do arquivo LEX_SRC
+$(BISON_SRC): $(PARSER)
+	@$(BISON) $(BISON_FLG) $(BISON_SRC)
+
+
+# Regra para criar o arquivo FLEX_SRC a partir do arquivo LEX_SRC
 # Ele depende do seu arquivo .l
-$(C_SRC): $(LEX_SRC)
-	 @$(LEX) $(LDLIBS) $(LEX_SRC)
+$(FLEX_SRC): $(SCANNER)
+	 @$(FLEX) $(LDLIBS) $(LEX_SRC)
 
 
 # Alvo "clean" para remover arquivos gerados
 clean:
-	@rm -f $(TARGET) $(C_SRC) *.o
+	@rm -f $(TARGET) $(FLEX_SRC) *.o
 
 # Declarar alvos que não são nomes de arquivos
 .PHONY: all clean
