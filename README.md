@@ -9,3 +9,7 @@ Linguagem de programacao imperativa inspirada nas girias baianas.
 # Exemplos
 
 Exemplos de instruções da linguagem estão [aqui](exemplos/exemplos2.txt)
+
+# Changelist
+
+A lista de alteracoes do analisador léxico pode ser encontrada [aqui](lexer/scanner.l#Changelist).
