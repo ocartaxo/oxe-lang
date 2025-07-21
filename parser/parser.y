@@ -205,6 +205,34 @@ else_part:
     | T_VANESSA if_statement { $$ = createNode("else", NULL, $2, NULL); } /* else if */
     ;
 
+while_loop:
+    T_ENQUANTO T_LPAREN expression T_RPAREN block { $$ = createNode("while", NULL, $3, $5); }
+    ;
+
+do_while_loop:
+    T_FAZ block T_ENQUANTO T_LPAREN expression T_RPAREN { $$ = createNode("do_while", NULL, $5, $2); }
+    ;
+
+for_loop:
+    T_PALETADA T_LPAREN for_init T_SEMICOLON for_condition T_SEMICOLON for_increment T_RPAREN block { $$ = createNode("for", NULL, $3, createNode("for_parts", NULL, $5, createNode("for_parts", NULL, $7, $9))); }
+    ;
+
+for_init:
+    declaration { $$ = $1; }
+    | assignment { $$ = $1; }
+    | /* Vazio */ { $$ = createNode("empty_for_init", NULL, NULL, NULL); }
+    ;
+
+for_condition:
+    expression { $$ = $1; }
+    | /* Vazio */ { $$ = createNode("empty_for_cond", NULL, NULL, NULL); }
+    ;
+
+for_increment:
+    assignment { $$ = $1; }
+    | /* Vazio */ { $$ = createNode("empty_for_inc", NULL, NULL, NULL); }
+    ;
+
 
 %%
 
