@@ -338,8 +338,8 @@ void printTreeInFile(Node* root, FILE* out, int level) {
 
   /*
    for (int i = 0; i < level; i++)
-  */       fprintf(out, "  ");
-
+         fprintf(out, "  ");
+  */
   fprintf(out, "%*s", level, " "); // <----- utilizando o padding do printf
   if(strlen(root->value) > 0)
     fprintf(out, "%s (%s)\n",root->name, root->value);
