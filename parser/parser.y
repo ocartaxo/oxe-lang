@@ -54,7 +54,7 @@ Node* root = NULL;
 
 /* Literais e Identificador */
 %token <str> T_ID
-%token <str> T_INTEGER_LITERAL T_FLOAT_LITERAL T_CHAR_LITERAL T_STRING_LITERAL
+%token <str> T_NUM_LITERAL T_FLOAT_LITERAL T_CHAR_LITERAL T_STRING_LITERAL
 
 /* Operadores */
 %token <str> T_ASSIGN T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_MODULO T_POWER
@@ -100,11 +100,112 @@ Node* root = NULL;
 
 %%
   /* REGRAS DA GRAMATICA (PRODUCOES) */
+  program:
+    statement_list { 
+        printf("Árvore Sintática:\n");
+        printTree($1, 0);
+        /* Abre o arquivo output_sin.txt para gravar a árvore sintática */
+        FILE *sin_file = fopen("output_sin.txt", "w");
+        if (sin_file == NULL) {
+            fprintf(stderr, "Erro ao abrir output_sin.txt\n");
+            exit(1);
+        }
+        printTreeToFile($1, 0, sin_file);
+        fclose(sin_file);
+        freeTree($1);
+    }
+    ;
+
+statement_list:
+    statement { $$ = createNode("statement_list", NULL, $1, NULL); }
+    | statement_list statement { $$ = createNode("statement_list", NULL, $1, $2); }
+    ;
+
+
+statement:
+    declaration { $$ = $1; }
+    | assignment T_SEMICOLON { $$ = $1; }
+    | if_statement { $$ = $1; }
+    | while_loop { $$ = $1; }
+    | do_while_loop T_SEMICOLON { $$ = $1; }
+    | for_loop { $$ = $1; }
+    | function_definition { $$ = $1; }
+    | function_call T_SEMICOLON { $$ = createNode("function_call_statement", NULL, $1, NULL); }
+    | print_statement T_SEMICOLON { $$ = $1; }
+    | return_statement T_SEMICOLON { $$ = $1; }
+    | T_SEMICOLON { $$ = createNode("empty_statement", NULL, NULL, NULL); }
+    ;
+
+block:
+    T_LBRACE statement_list T_RBRACE { $$ = createNode("block", NULL, $2, NULL); }
+    | T_LBRACE T_RBRACE { $$ = createNode("block", NULL, NULL, NULL); }
+    ;
+
+
+/* --- Declaracao de Variaveis --- */
+declaration:
+    var_specifier type var_declaration_list T_SEMICOLON { $$ = createNode("declaration", NULL, $1, createNode("type", NULL, $2, $3)); }
+    ;
+
+var_specifier:
+    T_VAR { $$ = createNode("var_specifier", $1, NULL, NULL); }
+    | T_CONST { $$ = createNode("var_specifier", $1, NULL, NULL); }
+    ;
+
+type:
+    T_INTEIRO { $$ = createNode("type", $1, NULL, NULL); }
+    | T_FLUTUANTE { $$ = createNode("type", $1, NULL, NULL); }
+    | T_LONGO { $$ = createNode("type", $1, NULL, NULL); }
+    | T_OXE { $$ = createNode("type", $1, NULL, NULL); }
+    | T_OXENTE { $$ = createNode("type", $1, NULL, NULL); }
+    ;
+
+
+
+var_declaration_list:
+    var_declaration { $$ = createNode("var_declaration_list", NULL, $1, NULL); }
+    | var_declaration_list T_COMMA var_declaration { $$ = createNode("var_declaration_list", NULL, $1, $3); }
+    ;
+
+var_declaration:
+    T_ID { $$ = createNode("var_declaration", $1, NULL, NULL); }
+    | T_ID var_initializer { $$ = createNode("var_declaration", $1, $2, NULL); }
+    | T_ID T_LBRACKET T_RBRACKET { $$ = createNode("array_declaration", $1, NULL, NULL); }
+    | T_ID T_LBRACKET expression T_RBRACKET { $$ = createNode("array_declaration_sized", $1, $3, NULL); }
+    | T_ID T_LBRACKET T_RBRACKET T_ASSIGN T_LBRACE arg_list T_RBRACE { $$ = createNode("array_initialized", $1, $6, NULL); }
+    ;
+
+var_initializer:
+    T_ASSIGN expression { $$ = createNode("initializer", NULL, $2, NULL); }
+    ;
+
+
+/* --- Atribuicao --- */
+assignment:
+    T_ID assignment_operator expression { $$ = createNode("assignment", $1, $2, $3); }
+    | T_ID T_LBRACKET expression T_RBRACKET assignment_operator expression { $$ = createNode("array_assignment", $1, $3, createNode("assignment_op", NULL, $5, $6)); }
+    | T_ID T_INCREMENT { $$ = createNode("post_increment", $1, NULL, NULL); }
+    | T_ID T_DECREMENT { $$ = createNode("post_decrement", $1, NULL, NULL); }
+    | T_INCREMENT T_ID { $$ = createNode("pre_increment", $2, NULL, NULL); }
+    | T_DECREMENT T_ID { $$ = createNode("pre_decrement", $2, NULL, NULL); }
+    ;
+
+assignment_operator:
+    T_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    | T_PLUS_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    | T_MINUS_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    | T_MULTIPLY_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    | T_DIVIDE_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    | T_MODULO_ASSIGN { $$ = createNode("assign_op", $1, NULL, NULL); }
+    ;
+
 %%
 
 
+FILE* output_file;
+
 typedef struct Node {
-  char name[50]; // podia ser ponteiro?
+  char name[50];
   char value[50];
   struct Node* left;
   struct Node* right;
