@@ -13,7 +13,7 @@ LDLIBS = -ll
 
 # Bison
 BISON = bison
-BISON_FLG = -d -y
+BISON_FLG = -d
 
 # Nome do seu arquivo fonte .l
 SCANNER = lexer/scanner.l 
@@ -21,14 +21,9 @@ SCANNER = lexer/scanner.l
 PARSER = parser/parser.y
 
 # Nome do arquivo C gerado pelo Flex (padrão é lex.yy.c)
-FLEX_SRC = lex.yy.c
+TARGET_LEXER = lex.yy.c
 # Nome do arquivo C gerado pelo Bison
-BISON_SRC = parser.tab.c
-
-# Nome do executável final
-TARGET_LEXER = lexer
-
-TARGET_PARSER = gramma
+TARGET_PARSER = parser.tab.c
 
 TARGET = arvore_sintatica
 
@@ -36,24 +31,24 @@ TARGET = arvore_sintatica
 all: $(TARGET)
 
 # Regra para criar o executável final a partir do arquivo C gerado
-# Ele depende do arquivo FLEX_SRC
-$(TARGET): $(BINSON_SRC) $(FLEX_SRC)
-	@$(CC) $(CFLAGS) -o $(TARGET) $(FLEX_SRC) $(LDLIBS)
-	@rm $(FLEX_SRC)
+# Ele depende do arquivo TARGET_LEXER
+$(TARGET): $(TARGET_PARSER) $(TARGET_LEXER)
+	@$(CC) $(CFLAGS) -o $(TARGET) $(TARGET_PARSER) $(TARGET_LEXER) $(LDLIBS)
+	@rm $(TARGET_LEXER)
 
-$(BISON_SRC): $(PARSER)
-	@$(BISON) $(BISON_FLG) $(BISON_SRC)
+$(TARGET_PARSER): $(PARSER)
+	@$(BISON) $(BISON_FLG) $(PARSER)
 
 
-# Regra para criar o arquivo FLEX_SRC a partir do arquivo LEX_SRC
+# Regra para criar o arquivo TARGET_LEXER a partir do arquivo LEX_SRC
 # Ele depende do seu arquivo .l
-$(FLEX_SRC): $(SCANNER)
-	 @$(FLEX) $(LDLIBS) $(LEX_SRC)
+$(TARGET_LEXER): $(SCANNER)
+	 @$(FLEX) $(LDLIBS) $(SCANNER)
 
 
 # Alvo "clean" para remover arquivos gerados
 clean:
-	@rm -f $(TARGET) $(FLEX_SRC) *.o
+	@rm -f $(TARGET) $(TARGET_LEXER) *.o
 
 # Declarar alvos que não são nomes de arquivos
 .PHONY: all clean
