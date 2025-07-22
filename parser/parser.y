@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define TOKEN_NAME_LENGTH 256
+#define TOKEN_VALUE_LENGTH 128
+
 /* Prototipo da funcao do analisador lexico */
 int yylex();
 /* Prototipo da funcao de erro */
@@ -10,8 +13,8 @@ void yyerror(const char* s);
 
 /* Estrutura do no da Arvore Sintatica Abstrata (AST) */
 typedef struct Node {
-  char name[50];
-  char value[50];
+  char name[TOKEN_NAME_LENGTH];
+  char value[TOKEN_VALUE_LENGTH];
   struct Node* left;
   struct Node* right;
 } Node;
