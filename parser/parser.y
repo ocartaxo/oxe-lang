@@ -307,7 +307,7 @@ primary_expression:
     ;
 
 literal:
-    T_INTEGER_LITERAL { $$ = createNode("integer_literal", $1, NULL, NULL); }
+    T_NUM_LITERAL { $$ = createNode("integer_literal", $1, NULL, NULL); }
     | T_FLOAT_LITERAL { $$ = createNode("float_literal", $1, NULL, NULL); }
     | T_CHAR_LITERAL { $$ = createNode("char_literal", $1, NULL, NULL); }
     | T_STRING_LITERAL { $$ = createNode("string_literal", $1, NULL, NULL); }
