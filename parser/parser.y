@@ -77,7 +77,7 @@ Node* root = NULL;
 %type <node> while_loop do_while_loop for_loop for_init for_condition for_increment
 %type <node> function_definition function_call param_list params return_type arg_list args
 %type <node> print_statement return_statement
-%type <node> expression term factor primary_expression literal
+%type <node> expression primary_expression literal
 
 /* Precedencia e Associatividade dos Operadores
   Define como expressoes complexas sao avaliadas.
