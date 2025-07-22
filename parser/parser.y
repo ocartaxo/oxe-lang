@@ -27,6 +27,8 @@ void freeTree(Node* root);
 
 /* Raiz da arvore sintatica */
 Node* root = NULL;
+/* Arquivo de saída */
+FILE* output_file;
 
 %}
 
@@ -404,9 +406,18 @@ void yyerror(const char* s) {
   fprintf(stderr, "Erro de sintaxe na linha %d: %s\n", yylineno, s);
 }
 
+
+int yydebug = 0;
+
 int main(void) {
+  output_file = fopen("output.txt", "w+");
+  if(!output_file) {
+    fprintf(stderr, "Erro ao abrir arquivo de saída!");
+    exit(1);
+  }
 
-  
-
+  yydebug = 1;
+  yyparse();
+  fclose(output_file);
   return 0;
 }
