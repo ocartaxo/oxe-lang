@@ -39,83 +39,83 @@ void add_identifier(char *id, char *type) {
         strcpy(identifiers[identifier_count].id, id);
         strcpy(identifiers[identifier_count].type, type);
         identifier_count++;
-        fprintf(output_file, "<id, %d> ", identifier_count);
+        ffprintf(output_file,output_file, "<id, %d> ", identifier_count);
     } else {
-        fprintf(output_file, "<id, %d> ", idx + 1);
+        ffprintf(output_file,output_file, "<id, %d> ", idx + 1);
     }
 }
 
 //TODO alterar prinf para fprintf (imprimir no arquivo de saida)
 // Função para imprimir o tipo de token (para depuração)
 void print_token(TokenType type, const char* yytext_val) {
-    printf("<T_");
+    fprintf(output_file,"<T_");
     switch (type) {
-        case T_INTEIRO: printf("INTEIRO"); break;
-        case T_FLUTUANTE: printf("FLUTUANTE"); break;
-        case T_LONGO: printf("LONGO"); break;
-        case T_VAR: printf("VAR"); break;
-        case T_CONST: printf("CONST"); break;
-        case T_OXE: printf("OXE"); break;
-        case T_OXENTE: printf("OXENTE"); break;
-        case T_BROCOU: printf("BROCOU"); break;
-        case T_PEGAVISAO: printf("PEGAVISAO"); break;
-        case T_PALETADA: printf("PALETADA"); break;
-        case T_BARRIL: printf("BARRIL"); break;
-        case T_SEPIQUE: printf("SEPIQUE"); break;
-        case T_SEPLANTE: printf("SEPLANTE"); break;
-        case T_VANESSA: printf("VANESSA"); break;
-        case T_NADA: printf("NADA"); break;
-        case T_FAZ: printf("FAZ"); break;
-        case T_ENQUANTO: printf("ENQUANTO"); break;
+        case T_INTEIRO: fprintf(output_file, "INTEIRO"); break;
+        case T_FLUTUANTE: fprintf(output_file, "FLUTUANTE"); break;
+        case T_LONGO: fprintf(output_file, "LONGO"); break;
+        case T_VAR: fprintf(output_file, "VAR"); break;
+        case T_CONST: fprintf(output_file, "CONST"); break;
+        case T_OXE: fprintf(output_file, "OXE"); break;
+        case T_OXENTE: fprintf(output_file, "OXENTE"); break;
+        case T_BROCOU: fprintf(output_file, "BROCOU"); break;
+        case T_PEGAVISAO: fprintf(output_file, "PEGAVISAO"); break;
+        case T_PALETADA: fprintf(output_file, "PALETADA"); break;
+        case T_BARRIL: fprintf(output_file, "BARRIL"); break;
+        case T_SEPIQUE: fprintf(output_file, "SEPIQUE"); break;
+        case T_SEPLANTE: fprintf(output_file, "SEPLANTE"); break;
+        case T_VANESSA: fprintf(output_file, "VANESSA"); break;
+        case T_NADA: fprintf(output_file, "NADA"); break;
+        case T_FAZ: fprintf(output_file, "FAZ"); break;
+        case T_ENQUANTO: fprintf(output_file, "ENQUANTO"); break;
 
-        case T_PLUS: printf("PLUS"); break;
-        case T_MINUS: printf("MINUS"); break;
-        case T_MULTIPLY: printf("MULTIPLY"); break;
-        case T_DIVIDE: printf("DIVIDE"); break;
-        case T_MODULO: printf("MODULO"); break;
-        case T_BITWISE_AND: printf("BITWISE_AND"); break;
-        case T_BITWISE_OR: printf("BITWISE_OR"); break;
-        case T_BITWISE_NOT: printf("BITWISE_NOT"); break;
-        case T_BITWISE_XOR: printf("BITWISE_XOR"); break;
-        case T_EQUAL_EQUAL: printf("EQUAL_EQUAL"); break;
-        case T_NOT_EQUAL: printf("NOT_EQUAL"); break;
-        case T_LESS: printf("LESS"); break;
-        case T_GREATER: printf("GREATER"); break;
-        case T_LESS_EQUAL: printf("LESS_EQUAL"); break;
-        case T_GREATER_EQUAL: printf("GREATER_EQUAL"); break;
-        case T_ASSIGN: printf("ASSIGN"); break;
-        case T_POWER: printf("POWER"); break;
-        case T_INCREMENT: printf("INCREMENT"); break;
-        case T_DECREMENT: printf("DECREMENT"); break;
-        case T_PLUS_ASSIGN: printf("PLUS_ASSIGN"); break;
-        case T_MINUS_ASSIGN: printf("MINUS_ASSIGN"); break;
-        case T_MULTIPLY_ASSIGN: printf("MULTIPLY_ASSIGN"); break;
-        case T_DIVIDE_ASSIGN: printf("DIVIDE_ASSIGN"); break;
-        case T_MODULO_ASSIGN: printf("MODULO_ASSIGN"); break;
+        case T_PLUS: fprintf(output_file, "PLUS"); break;
+        case T_MINUS: fprintf(output_file, "MINUS"); break;
+        case T_MULTIPLY: fprintf(output_file, "MULTIPLY"); break;
+        case T_DIVIDE: fprintf(output_file, "DIVIDE"); break;
+        case T_MODULO: fprintf(output_file, "MODULO"); break;
+        case T_BITWISE_AND: fprintf(output_file, "BITWISE_AND"); break;
+        case T_BITWISE_OR: fprintf(output_file, "BITWISE_OR"); break;
+        case T_BITWISE_NOT: fprintf(output_file, "BITWISE_NOT"); break;
+        case T_BITWISE_XOR: fprintf(output_file, "BITWISE_XOR"); break;
+        case T_EQUAL_EQUAL: fprintf(output_file, "EQUAL_EQUAL"); break;
+        case T_NOT_EQUAL: fprintf(output_file,"NOT_EQUAL"); break;
+        case T_LESS: fprintf(output_file, "LESS"); break;
+        case T_GREATER: fprintf(output_file, "GREATER"); break;
+        case T_LESS_EQUAL: fprintf(output_file, "LESS_EQUAL"); break;
+        case T_GREATER_EQUAL: fprintf(output_file, "GREATER_EQUAL"); break;
+        case T_ASSIGN: fprintf(output_file, "ASSIGN"); break;
+        case T_POWER: fprintf(output_file, "POWER"); break;
+        case T_INCREMENT: fprintf(output_file, "INCREMENT"); break;
+        case T_DECREMENT: fprintf(output_file, "DECREMENT"); break;
+        case T_PLUS_ASSIGN: fprintf(output_file, "PLUS_ASSIGN"); break;
+        case T_MINUS_ASSIGN: fprintf(output_file, "MINUS_ASSIGN"); break;
+        case T_MULTIPLY_ASSIGN: fprintf(output_file, "MULTIPLY_ASSIGN"); break;
+        case T_DIVIDE_ASSIGN: fprintf(output_file, "DIVIDE_ASSIGN"); break;
+        case T_MODULO_ASSIGN: fprintf(output_file, "MODULO_ASSIGN"); break;
 
-        case T_LPAREN: printf("LPAREN"); break;
-        case T_RPAREN: printf("RPAREN"); break;
-        case T_LBRACE: printf("LBRACE"); break;
-        case T_RBRACE: printf("RBRACE"); break;
-        case T_LBRACKET: printf("LBRACKET"); break;
-        case T_RBRACKET: printf("RBRACKET"); break;
-        case T_SEMICOLON: printf("SEMICOLON"); break;
-        case T_COMMA: printf("COMMA"); break;
+        case T_LPAREN: fprintf(output_file, "LPAREN"); break;
+        case T_RPAREN: fprintf(output_file, "RPAREN"); break;
+        case T_LBRACE: fprintf(output_file," LBRACE"); break;
+        case T_RBRACE: fprintf(output_file, "RBRACE"); break;
+        case T_LBRACKET: fprintf(output_file, "LBRACKET"); break;
+        case T_RBRACKET: fprintf(output_file, "RBRACKET"); break;
+        case T_SEMICOLON: fprintf(output_file, "SEMICOLON"); break;
+        case T_COMMA: fprintf(output_file, "COMMA"); break;
 
-        case T_ID: add_identifier(yytext_val, "unknown"); break;
-        case T_NUM_LITERAL: printf("NUMBER_LITERAL"); break;
-        case T_FLOAT_LITERAL: printf("FLOAT_LITERAL"); break;
-        case T_CHAR_LITERAL: printf("CHAR_LITERAL"); break;
-        case T_STRING_LITERAL: printf("STRING_LITERAL"); break;
+        case T_ID: add_identifier(yytext_val,  "UNKNOWN"); break;
+        case T_NUM_LITERAL: fprintf(output_file, "NUMBER_LITERAL"); break;
+        case T_FLOAT_LITERAL: fprintf(output_file, "FLOAT_LITERAL"); break;
+        case T_CHAR_LITERAL: fprintf(output_file, "CHAR_LITERAL"); break;
+        case T_STRING_LITERAL: fprintf(output_file, "STRING_LITERAL"); break;
 
-        case T_ERROR: printf("ERROR"); break;
-        case T_EOF: printf("EOF"); break;
-        default: printf("UNKNOWN"); break;
+        case T_ERROR: fprintf(output_file, "ERROR"); break;
+        case T_EOF: fprintf(output_file, "EOF"); break;
+        default: fprintf(output_file, "UNKNOWN"); break;
     }
     if (yytext_val) {
-        printf(", '%s'", yytext_val);
+        fprintf(output_file, ", '%s'", yytext_val);
     }
-    printf(">\n");
+    fprintf(output_file,"> ");
 }
 
 %}
@@ -240,29 +240,7 @@ WHITESPACE  [ \t\n]+
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
     /* Tratamento de erro para caracteres invalidos */
-.           { printf(output_file, "<invalido, %s> ", yytext); return T_ERROR; }
+.           { fprintf(output_file, "<invalido, %s> ", yytext); return T_ERROR; }
 
 %%
 
-
-int main(int argc, char **argv) {
-    if (argc > 1) {
-        yyin = fopen(argv[1], "r");
-        if (!yyin) {
-            perror("Não foi possível abrir o arquivo");
-            return 1;
-        }
-    } else {
-        printf("Uso: %s <arquivo_fonte>\n", argv[0]);
-        return 1;
-    }
-
-    while(yylex() != 0) {}
-
-    if (yyin != stdin && yyin != NULL) {
-        fclose(yyin);
-    }
-
-    print_token(T_EOF, NULL); // Sinaliza o fim do arquivo
-    return 0;
-}
