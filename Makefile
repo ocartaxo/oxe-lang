@@ -48,7 +48,7 @@ $(TARGET_LEXER): $(SCANNER)
 
 # Alvo "clean" para remover arquivos gerados
 clean:
-	@rm -f $(TARGET) $(TARGET_LEXER) *.o
-
+	@rm -f $(TARGET) $(TARGET_LEXER) $(TARGET_PARSER) *.h *.o
+	
 # Declarar alvos que não são nomes de arquivos
 .PHONY: all clean

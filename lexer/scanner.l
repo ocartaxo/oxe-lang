@@ -2,17 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "y.tab.h" // Header gerado pelo Bison
+#include "parser.tab.h" // Header gerado pelo Bison
 
 extern YYSTYPE yylval; // Variavel para comunicar valores ao Bison
 
 extern FILE* output_file;
 
+typedef enum yytokentype TokenType;
 
 // --- Início da Tabela de Símbolos ---
 #define MAX_SYMBOLS 100000        // Número máximo de identificadores na tabela
 #define MAX_ID_LENGTH 256       // Tamanho máximo de um identificador
 #define MAX_TYPE_LENGTH 128    // Tamanho máximo do tipo de um identificador
+
 
 /* Estrutura para a tabela de símbolos */
 typedef struct {
@@ -39,13 +41,12 @@ void add_identifier(char *id, char *type) {
         strcpy(identifiers[identifier_count].id, id);
         strcpy(identifiers[identifier_count].type, type);
         identifier_count++;
-        ffprintf(output_file,output_file, "<id, %d> ", identifier_count);
+        fprintf(output_file, "<id, %d> ", identifier_count);
     } else {
-        ffprintf(output_file,output_file, "<id, %d> ", idx + 1);
+        fprintf(output_file, "<id, %d> ", idx + 1);
     }
 }
 
-//TODO alterar prinf para fprintf (imprimir no arquivo de saida)
 // Função para imprimir o tipo de token (para depuração)
 void print_token(TokenType type, const char* yytext_val) {
     fprintf(output_file,"<T_");
@@ -107,10 +108,9 @@ void print_token(TokenType type, const char* yytext_val) {
         case T_FLOAT_LITERAL: fprintf(output_file, "FLOAT_LITERAL"); break;
         case T_CHAR_LITERAL: fprintf(output_file, "CHAR_LITERAL"); break;
         case T_STRING_LITERAL: fprintf(output_file, "STRING_LITERAL"); break;
-
-        case T_ERROR: fprintf(output_file, "ERROR"); break;
-        case T_EOF: fprintf(output_file, "EOF"); break;
-        default: fprintf(output_file, "UNKNOWN"); break;
+        case T_INVALID: fprintf(output_file, "INVALID"); break;
+        
+        default: fprintf(output_file, "NOT_DEFINED"); break;
     }
     if (yytext_val) {
         fprintf(output_file, ", '%s'", yytext_val);
@@ -119,9 +119,6 @@ void print_token(TokenType type, const char* yytext_val) {
 }
 
 %}
-
-%option noyywrap
-%option yylineno
 
 /* Definicoes de Expressoes Regulares (atalhos) */
 DIGIT       [0-9]+
@@ -240,7 +237,7 @@ WHITESPACE  [ \t\n]+
 {WHITESPACE}  { /* Ignora espaços em branco, tabs, novas linhas e retornos de carro */ }
 
     /* Tratamento de erro para caracteres invalidos */
-.           { fprintf(output_file, "<invalido, %s> ", yytext); return T_ERROR; }
+.           { print_token(T_INVALID, yytext); return T_INVALID; }
 
 %%
 

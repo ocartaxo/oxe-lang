@@ -145,34 +145,17 @@ O parser define a precedência e associatividade dos operadores para garantir a 
 
 ## Como Compilar e Usar
 
-Para compilar e usar este parser, você precisará ter o Flex (Lex) e o Bison (Yacc) instalados em seu sistema. Os passos gerais são:
+Para compilar e usar este parser, você precisará ter o GCC, Flex (Lex) e o Bison (Yacc) instalados em seu sistema. Os passos gerais são:
 
-1. **Gerar o analisador léxico**: Use o Flex para gerar o arquivo `lex.yy.c` a partir do `lexer.l`.
-
-   ```bash
-   flex lexer.l
-   ```
-
-2. **Gerar o analisador sintático**: Use o Bison para gerar o arquivo `y.tab.c` (ou `parser.tab.c`) a partir do `parser.l`.
-
-   ```bash
-   bison -d parser.l
-   ```
-
-   A opção `-d` gera também o arquivo de cabeçalho (`y.tab.h` ou `parser.tab.h`) que contém as definições dos tokens para o analisador léxico.
-
-3. **Compilar os arquivos C**: Compile os arquivos `.c` gerados (`lex.yy.c` e `y.tab.c`) juntamente com qualquer código C auxiliar (como as funções de manipulação da AST) usando um compilador C (ex: GCC).
+1. **Buildar o analisador_sintatico**: Execute o comando make abaixo a partir da pasta raiz.
+    ```bash
+    make
+    ````
+    
+2. **Executar o compilador**: Execute o binário gerado, passando o código fonte da linguagem 'Oxe Lang' como entrada.
 
    ```bash
-   gcc lex.yy.c y.tab.c -o meu_compilador
-   ```
-
-   *Nota: Pode ser necessário incluir a biblioteca `l` para o Flex: `gcc lex.yy.c y.tab.c -lfl -o meu_compilador`*
-
-4. **Executar o compilador**: Execute o binário gerado, passando o código fonte da linguagem 'Oxe Lang' como entrada.
-
-   ```bash
-   ./meu_compilador < seu_codigo.oxe
+   ./arvore_sintatica
    ```
 
 ## Exemplo de Código 'Oxe Lang'

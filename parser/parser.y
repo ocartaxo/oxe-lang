@@ -1,3 +1,7 @@
+%code requires {
+    /* Declaração antecipada para que o header conheça o tipo Node */
+    typedef struct Node Node;
+}
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,11 +26,9 @@ typedef struct Node {
 /* Prototipos das funcoes da AST */
 Node* createNode(char* name, char* value, Node* left, Node* right);
 void printTreeInFile(Node* root, FILE* out, int level);
-void printTreeInStd(int level, Node* root)
+void printTreeInStd(int level, Node* root);
 void freeTree(Node* root);
 
-/* Raiz da arvore sintatica */
-Node* root = NULL;
 /* Arquivo de saída */
 FILE* output_file;
 
@@ -60,6 +62,7 @@ FILE* output_file;
 /* Literais e Identificador */
 %token <str> T_ID
 %token <str> T_NUM_LITERAL T_FLOAT_LITERAL T_CHAR_LITERAL T_STRING_LITERAL
+%token <str> T_INVALID
 
 /* Operadores */
 %token <str> T_ASSIGN T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_MODULO T_POWER
@@ -108,14 +111,14 @@ FILE* output_file;
   program:
     statement_list { 
         printf("Árvore Sintática:\n");
-        printTree($1, 0);
+        printTreeInFile($1, output_file, 0);
         /* Abre o arquivo output_sin.txt para gravar a árvore sintática */
-        FILE *sin_file = fopen("output_sin.txt", "w");
+        FILE *sin_file = fopen("input.txt", "w");
         if (sin_file == NULL) {
             fprintf(stderr, "Erro ao abrir output_sin.txt\n");
             exit(1);
         }
-        printTreeToFile($1, 0, sin_file);
+        printTreeInFile($1, 0, sin_file);
         fclose(sin_file);
         freeTree($1);
     }
@@ -319,12 +322,11 @@ literal:
     ;
 
 %%
-
 /* Codigo C auxiliar */
 
 /* Funcao para criar um novo no da AST */
 Node* createNode(char* name, char* value, Node* left, Node* right) {
-  Node* newNode = (Node*)malloc(sizeOf(Node));
+  Node* newNode = (Node*)malloc(sizeof(Node));
   if (!newNode) {
     fprintf(stderr, "Ocorreu um erro durante a alocação de memória!");
     exit(1);
@@ -348,10 +350,10 @@ Node* createNode(char* name, char* value, Node* left, Node* right) {
   Quando o nó for "expr_item", ele será tratado como transparente.
 */
 void printTreeInStd(int level, Node* root) {
-  if (root == null) return;
+  if (root == NULL) return;
 
-  if(str_cmp(root->name, "expr_item") == 0) {
-    printTreeInStd(root->left, level);
+  if(strcmp(root->name, "expr_item") == 0) {
+    printTreeInStd(level, root->left);
     return;
   }
 
@@ -367,14 +369,14 @@ void printTreeInStd(int level, Node* root) {
   else
     printf("%s\n", root->name);
 
-  printTreeInStd(root->left, level + 1);
-  printTreeInStd(root->right, level + 1);
+  printTreeInStd(level + 1, root->left);
+  printTreeInStd(level + 1, root->right);
 }
 
 void printTreeInFile(Node* root, FILE* out, int level) {
-  if (root == null) return;
+  if (root == NULL) return;
 
-  if(str_cmp(root->name, "expr_item") == 0) {
+  if(strcmp(root->name, "expr_item") == 0) {
     printTreeInFile(root->left, out, level);
     return;
   }
@@ -390,12 +392,12 @@ void printTreeInFile(Node* root, FILE* out, int level) {
   else
     fprintf(out, "%s\n", root->name);
 
-  printTreeToFile(root->left, level + 1, out);
-  printTreeToFile(root->right, level + 1, out);
+  printTreeInFile(root->left, out, level + 1);
+  printTreeInFile(root->right, out, level + 1);
 }
 
 void freeTree(Node* root) {
-  if root(root == NULL) return;
+  if (root == NULL) return;
   freeTree(root->left);
   freeTree(root->right);
   free(root);
