@@ -24,13 +24,97 @@ typedef struct Node {
 } Node;
 
 /* Prototipos das funcoes da AST */
-Node* createNode(char* name, char* value, Node* left, Node* right);
-void printTreeInFile(Node* root, FILE* out, int level);
-void printTreeInStd(int level, Node* root);
-void freeTree(Node* root);
+// Node* createNode(char* name, char* value, Node* left, Node* right);
+// void printTreeInFile(Node* root, FILE* out, int level);
+// void printTreeInStd(int level, Node* root);
+// void freeTree(Node* root);
 
 /* Arquivo de saída */
 FILE* output_file;
+
+/* Funcao para criar um novo no da AST */
+Node* createNode(char* name, char* value, Node* left, Node* right) {
+  Node* newNode = (Node*)malloc(sizeof(Node));
+  if (!newNode) {
+    fprintf(stderr, "Ocorreu um erro durante a alocação de memória!");
+    exit(1);
+  }
+  strcpy(newNode->name, name);
+  if (value)
+    strcpy(newNode->value, value);
+  else
+    newNode->value[0] = '\0';
+
+  newNode->left = left;
+  newNode->right = right;
+
+  return newNode;
+
+}
+
+
+/*
+  Imprime a árvore sintática (com identação) na saída padrão
+  Quando o nó for "expr_item", ele será tratado como transparente.
+*/
+void printTreeInStd(Node* root, int level) {
+  if (root == NULL) return;
+
+  if(strcmp(root->name, "expr_item") == 0) {
+    printTreeInStd( root->left, level);
+    return;
+  }
+
+  /*
+  printf("%*s", level, " "); <----- utilizando o padding do printf
+  for(int i = 0; i < level, i++)
+    printf(" ");
+  */
+
+  printf("%*s", level, " "); // <----- utilizando o padding do printf
+  if(strlen(root->value) > 0)
+    printf("%s (%s)\n",root->name, root->value);
+  else
+    printf("%s\n", root->name);
+
+  printTreeInStd(root->left, level + 1);
+  printTreeInStd(root->right, level + 1);
+}
+
+void printTreeInFile(Node* root, FILE* out, int level) {
+  if (root == NULL) return;
+
+  if(strcmp(root->name, "expr_item") == 0) {
+    printTreeInFile(root->left, out, level);
+    return;
+  }
+
+  /*
+   for (int i = 0; i < level; i++)
+         fprintf(out, "  ");
+  */
+
+  fprintf(out, "%*s", level, " "); // <----- utilizando o padding do printf
+  if(strlen(root->value) > 0)
+    fprintf(out, "%s (%s)\n",root->name, root->value);
+  else
+    fprintf(out, "%s\n", root->name);
+
+  printTreeInFile(root->left, out, level + 1);
+  printTreeInFile(root->right, out, level + 1);
+}
+
+void freeTree(Node* root) {
+  if (root == NULL) return;
+  freeTree(root->left);
+  freeTree(root->right);
+  free(root);
+}
+
+void yyerror(const char* s) {
+  extern int yylineno;
+  fprintf(stderr, "Erro de sintaxe na linha %d: %s\n", yylineno, s);
+}
 
 %}
 
@@ -108,17 +192,17 @@ FILE* output_file;
 
 %%
   /* REGRAS DA GRAMATICA (PRODUCOES) */
-  program:
+program:
     statement_list { 
         printf("Árvore Sintática:\n");
-        printTreeInFile($1, output_file, 0);
+        printTreeInStd($1, 0);
         /* Abre o arquivo output_sin.txt para gravar a árvore sintática */
-        FILE *sin_file = fopen("input.txt", "w");
+        FILE *sin_file = fopen("output/output.txt", "w");
         if (sin_file == NULL) {
             fprintf(stderr, "Erro ao abrir output_sin.txt\n");
             exit(1);
         }
-        printTreeInFile($1, 0, sin_file);
+        printTreeInFile($1, sin_file, 0);
         fclose(sin_file);
         freeTree($1);
     }
@@ -243,9 +327,12 @@ for_increment:
 
 /* --- Funcoes --- */
 function_definition:
-    T_BARRIL T_ID T_LPAREN param_list T_RPAREN T_COLON return_type block { $$ = createNode("function_definition", $2, $4, createNode("return_type", NULL, $7, $8)); }
-    | T_BARRIL T_BROCOU T_LPAREN T_RPAREN T_COLON return_type block { $$ = createNode("main_function", $2, $6, $7); } /* Funcao principal 'brocou' */
+    T_BARRIL T_ID T_LPAREN param_list T_RPAREN T_COLON return_type block
+        { $$ = createNode("function_definition", $2, $4, createNode("body", NULL, $7, $8)); }
+    | T_BARRIL T_BROCOU T_LPAREN T_RPAREN T_COLON return_type block
+        { $$ = createNode("main_function", $2, NULL, createNode("body", NULL, $6, $7)); }
     ;
+
 
 return_type:
     type { $$ = $1; }
@@ -324,102 +411,20 @@ literal:
 %%
 /* Codigo C auxiliar */
 
-/* Funcao para criar um novo no da AST */
-Node* createNode(char* name, char* value, Node* left, Node* right) {
-  Node* newNode = (Node*)malloc(sizeof(Node));
-  if (!newNode) {
-    fprintf(stderr, "Ocorreu um erro durante a alocação de memória!");
-    exit(1);
-  }
-  strcpy(newNode->name, name);
-  if (value)
-    strcpy(newNode->value, value);
-  else
-    newNode->value[0] = '\0';
-
-  newNode->left = left;
-  newNode->right = right;
-
-  return newNode;
-
-}
-
-
-/*
-  Imprime a árvore sintática (com identação) na saída padrão
-  Quando o nó for "expr_item", ele será tratado como transparente.
-*/
-void printTreeInStd(int level, Node* root) {
-  if (root == NULL) return;
-
-  if(strcmp(root->name, "expr_item") == 0) {
-    printTreeInStd(level, root->left);
-    return;
-  }
-
-  /*
-  printf("%*s", level, " "); <----- utilizando o padding do printf
-  for(int i = 0; i < level, i++)
-    printf(" ");
-  */
-
-  printf("%*s", level, " "); // <----- utilizando o padding do printf
-  if(strlen(root->value) > 0)
-    printf("%s (%s)\n",root->name, root->value);
-  else
-    printf("%s\n", root->name);
-
-  printTreeInStd(level + 1, root->left);
-  printTreeInStd(level + 1, root->right);
-}
-
-void printTreeInFile(Node* root, FILE* out, int level) {
-  if (root == NULL) return;
-
-  if(strcmp(root->name, "expr_item") == 0) {
-    printTreeInFile(root->left, out, level);
-    return;
-  }
-
-  /*
-   for (int i = 0; i < level; i++)
-         fprintf(out, "  ");
-  */
-  
-  fprintf(out, "%*s", level, " "); // <----- utilizando o padding do printf
-  if(strlen(root->value) > 0)
-    fprintf(out, "%s (%s)\n",root->name, root->value);
-  else
-    fprintf(out, "%s\n", root->name);
-
-  printTreeInFile(root->left, out, level + 1);
-  printTreeInFile(root->right, out, level + 1);
-}
-
-void freeTree(Node* root) {
-  if (root == NULL) return;
-  freeTree(root->left);
-  freeTree(root->right);
-  free(root);
-}
-
-void yyerror(const char* s) {
-  extern int yylineno;
-  fprintf(stderr, "Erro de sintaxe na linha %d: %s\n", yylineno, s);
-}
 
 
 int yydebug = 0;
 
 int main(void) {
-  output_file = fopen("output.txt", "w+");
+  output_file = fopen("output/output.lex", "w+");
   if(!output_file) {
     fprintf(stderr, "Erro ao abrir arquivo de saída!");
     exit(1);
   }
 
   yydebug = 1;
+  printf("Iniciando o parser do arquivo...\n");
   yyparse();
-  fclose(output_file);
+
   return 0;
 }

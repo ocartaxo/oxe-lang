@@ -4,7 +4,7 @@
 #include <string.h>
 #include "parser.tab.h" // Header gerado pelo Bison
 
-extern YYSTYPE yylval; // Variavel para comunicar valores ao Bison
+// extern YYSTYPE yylval; // Variavel para comunicar valores ao Bison
 
 extern FILE* output_file;
 
@@ -26,7 +26,7 @@ Identifier identifiers[MAX_SYMBOLS];
 int identifier_count = 0;
 
 /* Procura um identificador na tabela de símbolos */
-int find_identifier(char *id) {
+int find_identifier(const char *id) {
     for (int i = 0; i < identifier_count; i++) {
         if (strcmp(identifiers[i].id, id) == 0)
             return i;
@@ -35,20 +35,21 @@ int find_identifier(char *id) {
 }
 
 /* Adiciona um identificador à tabela de símbolos */
-void add_identifier(char *id, char *type) {
+void add_identifier(const char *id, char *type) {
     int idx = find_identifier(id);
     if (idx == -1) {
         strcpy(identifiers[identifier_count].id, id);
         strcpy(identifiers[identifier_count].type, type);
         identifier_count++;
-        fprintf(output_file, "<id, %d> ", identifier_count);
+        fprintf(output_file, "ID, %d", identifier_count);
     } else {
-        fprintf(output_file, "<id, %d> ", idx + 1);
+        fprintf(output_file, "ID, %d", idx + 1);
     }
 }
 
 // Função para imprimir o tipo de token (para depuração)
 void print_token(TokenType type, const char* yytext_val) {
+    printf("Lendo token: <%d, %s>\n", type, yytext_val);
     fprintf(output_file,"<T_");
     switch (type) {
         case T_INTEIRO: fprintf(output_file, "INTEIRO"); break;
@@ -102,6 +103,7 @@ void print_token(TokenType type, const char* yytext_val) {
         case T_RBRACKET: fprintf(output_file, "RBRACKET"); break;
         case T_SEMICOLON: fprintf(output_file, "SEMICOLON"); break;
         case T_COMMA: fprintf(output_file, "COMMA"); break;
+        case T_COLON: fprintf(output_file, "COLON"); break;
 
         case T_ID: add_identifier(yytext_val,  "UNKNOWN"); break;
         case T_NUM_LITERAL: fprintf(output_file, "NUMBER_LITERAL"); break;
