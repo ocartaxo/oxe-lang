@@ -1,0 +1,8 @@
+ statement_list
+ main_function
+  body
+   type
+   block
+    statement_list
+     print
+      string_literal ("Olá, Mundo!")

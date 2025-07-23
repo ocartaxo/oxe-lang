@@ -1,0 +1,1 @@
+<T_BARRIL, 'barril'> <T_BROCOU, 'brocou'> <T_LPAREN, '('> <T_RPAREN, ')'> <T_COLON, ':'> <T_NADA, 'nada'> <T_ LBRACE, '{'> <T_PEGAVISAO, 'pegaVisao'> <T_LPAREN, '('> <T_STRING_LITERAL, '"Olá, Mundo!"'> <T_RPAREN, ')'> <T_SEMICOLON, ';'> <T_RBRACE, '}'> 

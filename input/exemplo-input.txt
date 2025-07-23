@@ -1,0 +1,3 @@
+barril brocou(): nada {
+    pegaVisao("Olá, Mundo!");
+}
