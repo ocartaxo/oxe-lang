@@ -1,12 +1,4 @@
-# Documentação do Analisador Sintático da Linguagem 'Oxe Lang'
-
-## MATA61 - Compiladores
-
-**Autores:**  
-
-- Isaac Araujo  
-- Otávio Cartaxo  
-- Rísia Cerqueira
+# Documentação do Analisador Sintático da Linguagem Oxelang
 
 Este documento descreve o parser da linguagem de programação 'Oxe Lang', desenvolvido utilizando as ferramentas Lex (Flex) e Yacc (Bison). A linguagem 'Oxe Lang' é uma linguagem didática com sintaxe inspirada no português brasileiro, projetada para demonstrar conceitos de compiladores e processamento de linguagens.
 
