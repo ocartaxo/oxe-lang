@@ -1,8 +1,9 @@
-# Oxelang
+# Oxelang (MATA61 - Compiladores)
 
 Linguagem de programacao imperativa inspirada nas girias baianas.
 
-**Autores**
+**Autores:**  
+
 - Isaac Araujo  
 - Otávio Cartaxo  
 - Rísia Cerqueira
