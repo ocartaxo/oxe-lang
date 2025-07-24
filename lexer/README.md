@@ -1,13 +1,5 @@
 # Oxe Lang - Analisador Léxico  
 
-## MATA61 - Compiladores
-
-**Autores:**  
-
-- Isaac Araujo  
-- Otávio Cartaxo  
-- Rísia Cerqueira
-
 ---
 
 ## Sobre a Oxe Lang (`.bais`)
@@ -241,10 +233,13 @@ make
 2. **Execute o analisador com um arquivo `.bais`:**
 
 ```bash
-./lexer exemplos/soma.bais
+./lexer input/exemplo-input.txt
 ```
 
 A saída será uma lista dos **tokens reconhecidos**, com sua **categoria** e valor identificado.
+```bash
+<T_BARRIL, 'barril'> <T_BROCOU, 'brocou'> <T_LPAREN, '('> <T_RPAREN, ')'> <T_COLON, ':'> <T_NADA, 'nada'> <T_ LBRACE, '{'> <T_PEGAVISAO, 'pegaVisao'> <T_LPAREN, '('> <T_STRING_LITERAL, '"Olá, Mundo!"'> <T_RPAREN, ')'> <T_SEMICOLON, ';'> <T_RBRACE, '}'> 
+```
 
 ---
 
